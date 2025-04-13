@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>NeuralNest - Edu-Tech Learning Platform</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- CSS Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            color: #fff;
+            background-color: #0e0e0e;
+        }
+        
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(0,0,0,0.5);
+        }
+        
+        .buttons a {
+            text-decoration: none;
+            color: #fff;
+            background: #ff4b2b;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-left: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .buttons a:hover {
+            background: #ff6f4d;
+            transform: scale(1.05);
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background-image: url('static/uploads/bg.jpeg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 0 20px;
+            overflow: hidden;
+        }
+        
+        /* Overlay */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.6));
+            z-index: 1;
+        }
+        
+        .quote {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            color: #fff;
+            animation: fadeIn 1.5s ease-out;
+        }
+        
+        .quote h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .quote p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 10px;
+            }
+        
+            .buttons a {
+                margin-left: 0;
+                margin-right: 0;
+                padding: 10px 18px;
+            }
+        
+            .quote h1 {
+                font-size: 2.2rem;
+            }
+        
+            .quote p {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .quote h1 {
+                font-size: 1.8rem;
+            }
+        
+            .quote p {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }        
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="buttons">
+            <a href="{{ url_for('login') }}" id="signinBtn">Sign In</a>
+            <a href="{{ url_for('register') }}" id="signupBtn">Sign Up</a>
+        </div>
+    </div>
+
+    <!-- Hero Section (Background Image and Quote) -->
+    <div class="hero-section">
+        <div class="quote">
+            <h1>Igniting Innovation through Education</h1>
+            <p>The future belongs to those who learn more skills and combine them in creative ways</p>
+        </div>
+    </div>
+  
+</body>
+</html>
