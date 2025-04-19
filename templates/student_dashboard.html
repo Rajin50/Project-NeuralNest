@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student Dashboard - NeuralNest</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- CSS Styles -->
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0e0e0e;
+            color: #fff;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff4b2b;
+            text-shadow: 0 0 10px rgba(255, 75, 43, 0.5);
+        }
+
+        .nav-buttons a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-buttons a:hover {
+            background: #ff4b2b;
+            transform: scale(1.05);
+        }
+
+        /* Container */
+        .container {
+            margin-top: 100px;
+            display: flex;
+            justify-content: space-between;
+            padding: 40px;
+            flex-wrap: wrap;
+        }
+
+        /* Left Panel */
+        .left-panel {
+            flex: 1.5;
+            margin-right: 30px;
+        }
+
+        .greeting h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .greeting h2 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #ccc;
+            margin-bottom: 30px;
+            animation: fadeInDown 1.2s ease;
+        }
+
+        /* Courses */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .course-card {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(255, 75, 43, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(255, 75, 43, 0.4);
+        }
+
+        .course-card img {
+            width: 100%;
+            height: 160px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .course-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #ff4b2b;
+        }
+
+        .course-card p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #bbb;
+            margin-bottom: 15px;
+        }
+
+        .view-course-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ff4b2b;
+            color: #fff;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .view-course-btn:hover {
+            background: #ff6f4d;
+        }
+
+        /* No Course Card */
+        .no-course-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed #ff4b2b;
+            text-align: center;
+            padding: 40px;
+            border-radius: 16px;
+            animation: fadeInUp 1s ease;
+        }
+
+        /* Right Panel */
+        .right-panel {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(255, 75, 43, 0.2);
+            animation: fadeInRight 1s ease;
+        }
+
+        .stat-card h3 {
+            font-size: 1.2rem;
+            color: #ff4b2b;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .left-panel, .right-panel {
+                margin: 0;
+                width: 100%;
+            }
+
+            .right-panel {
+                margin-top: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .nav-buttons a {
+                margin: 5px 10px;
+                font-size: 0.9rem;
+                padding: 6px 12px;
+            }
+
+            .greeting h1 {
+                font-size: 1.8rem;
+            }
+
+            .greeting h2 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="nav-buttons">
+            <a href="{{ url_for('student_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('get_courses') }}">Browse Courses</a>
+            <a href="{{ url_for('profile') }}">Profile</a>
+            <a href="{{ url_for('certifications') }}">Certifications</a>
+            <a href="{{ url_for('logout') }}">Log Out</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Left Panel (Student Info & Courses) -->
+        <div class="left-panel">
+            <!-- Greeting -->
+            <div class="greeting">
+                <h1>Hey, {{ student_name }}!</h1>  <!-- Replace "John Doe" dynamically -->
+                <h2>Welcome to LearnForge <br><br></h2> 
+                <h2>Here are your enrolled courses:</h2>
+            </div>
+
+            <!-- Enrolled Courses -->
+            {% if no_courses %}
+            <!-- Card for No Courses -->
+            <div class="course-card no-course-card">
+                <h4>You've not enrolled in any courses!<br> You need to enroll in courses.</h4>
+            </div>
+
+            {% else %}
+            <div class="courses-grid">
+                {% for course in enrolled_courses %}
+                <div class="course-card">
+                    <img src="{{ course[2] }}" alt="Course Image">
+                    <h3>{{ course[1] }}</h3>
+                    <p>In order to extract knowledge and insights from both organized and unstructured data, data science is an interdisciplinary profession that combines domain knowledge, programming abilities, and statistical competence.</p>
+                    <a class="view-course-btn" href="{{ url_for('view_course', course_code=course[0]) }}">View Course</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Panel (Stats) -->
+        <div class="right-panel">
+            <div class="stat-card">
+                <h3>Course Completed</h3>
+                <p>{{ completed_courses_count }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Certifications</h3>
+                <p>{{ completed_courses_count }}</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

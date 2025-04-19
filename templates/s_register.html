@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <!-- CSS file -->
+    <style>
+        /* General Reset and Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0e0e0e;
+            color: #fff;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(0,0,0,0.5);
+            text-decoration: none;
+        }
+
+        .navbar-right .nav-link {
+            text-decoration: none;
+            color: #fff;
+            background: #ff4b2b;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-left: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-right .nav-link:hover {
+            background: #ff6f4d;
+            transform: scale(1.05);
+        }
+
+        /* Registration Form Container */
+        .container {
+            max-width: 600px;
+            margin: 120px auto 50px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        /* Form Group Styling */
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .form-control {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 2px #ff4b2b;
+        }
+
+        select.form-control {
+            appearance: none;
+        }
+
+        /* Submit Button */
+        .btn.btn-primary {
+            background-color: #ff4b2b;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn.btn-primary:hover {
+            background-color: #ff6f4d;
+            transform: scale(1.02);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar-right {
+                margin-top: 10px;
+            }
+
+            .container {
+                margin: 140px 20px 50px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+     
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/" class="logo">NeuralNest</a>
+        </div>
+        <div class="navbar-right">
+            <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+            <a href="{{ url_for('login') }}" class="nav-link">Sign In</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Student Registration</h2>
+        <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.name.label }}
+                {{ form.name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.phone.label }}
+                {{ form.phone(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.current_institute.label }}
+                {{ form.current_institute(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.address.label }}
+                {{ form.address(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.dob.label }}
+                {{ form.dob(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="bg">Blood Group</label>
+                <select id="bg" name="bg" class="form-control">
+                    <option value="" disabled selected>Select your blood group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            <div class="form-group">
+                {{ form.profile_picture.label }}
+                {{ form.profile_picture(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</body>
+</html>
