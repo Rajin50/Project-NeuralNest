@@ -1,0 +1,303 @@
+/* Base Styles */
+:root {
+    --primary: #00e0ff;
+    --primary-dark: #00bcd4;
+    --secondary: #ff6b6b;
+    --background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --text-light: #ffffff;
+    --text-dark: #0a192f;
+    --success: #4caf50;
+    --warning: #ff9800;
+    --danger: #f44336;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  body {
+    background: var(--background);
+    color: var(--text-light);
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  
+  /* Exam Container */
+  .exam-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 0.8s ease-out;
+  }
+  
+  /* Header Section */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0, 224, 255, 0.1);
+    border-radius: 15px;
+    margin-bottom: 30px;
+    animation: slideInDown 0.6s ease-out;
+  }
+  
+  .candidate-info p {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+  }
+  
+  .timer {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px 20px;
+    border-radius: 50px;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 224, 255, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(0, 224, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 224, 255, 0); }
+  }
+  
+  /* Questions Section */
+  .questions-section {
+    margin-top: 20px;
+  }
+  
+  .question {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0;
+  }
+  
+  .question:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 224, 255, 0.1);
+  }
+  
+  .question:nth-child(1) { animation-delay: 0.2s; }
+  .question:nth-child(2) { animation-delay: 0.4s; }
+  .question:nth-child(3) { animation-delay: 0.6s; }
+  .question:nth-child(4) { animation-delay: 0.8s; }
+  .question:nth-child(5) { animation-delay: 1s; }
+  
+  .question h3 {
+    color: var(--primary);
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+  }
+  
+  .options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .options label {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .options label:hover {
+    background: rgba(0, 224, 255, 0.1);
+    transform: translateX(5px);
+  }
+  
+  .options input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    margin-right: 15px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .options input[type="radio"]:checked {
+    background: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 224, 255, 0.3);
+  }
+  
+  .options input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  /* Submit Button */
+  .submit-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background: var(--primary);
+    color: var(--text-dark);
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .submit-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 224, 255, 0.4);
+  }
+  
+  .submit-button:active {
+    transform: translateY(0);
+  }
+  
+  /* Results Section */
+  #results {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 15px;
+    margin-top: 30px;
+    animation: fadeIn 0.8s ease-out;
+  }
+  
+  #results h3 {
+    color: var(--primary);
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+  }
+  
+  #detailed-results {
+    margin-top: 20px;
+  }
+  
+  #detailed-results div {
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+  
+  .correct {
+    border-left: 4px solid var(--success);
+  }
+  
+  .incorrect {
+    border-left: 4px solid var(--danger);
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .header {
+      flex-direction: column;
+      text-align: center;
+      gap: 15px;
+    }
+    
+    .timer {
+      width: 100%;
+      text-align: center;
+    }
+    
+    .question {
+      padding: 20px 15px;
+    }
+    
+    .options label {
+      padding: 10px 15px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    body {
+      padding: 10px;
+    }
+    
+    .exam-container {
+      padding: 20px 15px;
+      border-radius: 15px;
+    }
+    
+    .question h3 {
+      font-size: 1rem;
+    }
+    
+    .submit-button {
+      padding: 12px;
+      font-size: 1rem;
+    }
+  }
+  
+  /* Critical Time Warning */
+  .warning {
+    animation: blink 1s infinite;
+  }
+  
+  @keyframes blink {
+    0% { color: var(--text-light); }
+    50% { color: var(--danger); }
+    100% { color: var(--text-light); }
+  }
