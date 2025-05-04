@@ -678,6 +678,479 @@ def submit_feedback(course_code):
     flash("Your feedback has been submitted successfully.", "success")
     return redirect(url_for('view_course', course_code=course_code))
 
+
+@app.route('/get_exam_page/<int:course_code>', methods=['GET'])
+def get_exam_page(course_code):
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT course_exam FROM courses WHERE course_code = %s", (course_code,))
+    result = cursor.fetchone()
+    cursor.close()
+    if result:
+        return jsonify({"exam_page": result[0]})  # Return the `course_exam` field
+    else:
+        return jsonify({"exam_page": None}), 404  # Return a 404 if no exam page is found
+    
+#=========================ds_exam_part==========================================================================================
+
+@app.route('/ds_exam/<int:course_code>')
+def ds_exam(course_code):
+    cursor = mysql.connection.cursor()
+
+    # Fetch student information
+    student_id = session.get('student_id')
+    if not student_id:
+        return redirect('/login')
+
+    cursor.execute("SELECT name FROM students WHERE student_id = %s", (student_id,))
+    student = cursor.fetchone()
+    student_name = student[0]
+    # Fetch questions (predefined in this example)
+    questions = [
+        {"id": 1, "question": "What is data science primarily concerned with?", 
+        "options": ["Analyzing data", "Designing websites", "Hardware engineering", "Writing novels"], 
+        "answer": "a"},
+        {"id": 2, "question": "Which of the following is a common programming language used in data science?", 
+        "options": ["HTML", "Python", "CSS", "PHP"], 
+        "answer": "b"},
+        {"id": 3, "question": "What is the purpose of data visualization?", 
+        "options": ["To clean the data", "To represent data graphically", "To store data in databases", "To perform mathematical calculations"], 
+        "answer": "b"},
+        {"id": 4, "question": "Which library in Python is widely used for data manipulation?", 
+        "options": ["NumPy", "Pandas", "TensorFlow", "Matplotlib"], 
+        "answer": "b"},
+        {"id": 5, "question": "What does the term 'Big Data' refer to?", 
+        "options": ["A type of data structure", "Large and complex data sets", "An algorithm for sorting data", "A file format for storing data"], 
+        "answer": "b"},
+        {"id": 6, "question": "What is the first step in the data science process?", 
+        "options": ["Data cleaning", "Data collection", "Data visualization", "Model deployment"], 
+        "answer": "b"},
+        {"id": 7, "question": "Which of the following best describes machine learning?", 
+        "options": ["A subset of artificial intelligence", "A database query language", "A type of data visualization", "A programming paradigm"], 
+        "answer": "a"},
+        {"id": 8, "question": "What is a 'dataset' in data science?", 
+        "options": ["A collection of related data points", "A tool for analyzing data", "A programming library", "A database management system"], 
+        "answer": "a"},
+        {"id": 9, "question": "What does 'EDA' stand for in data science?", 
+        "options": ["Extensive Data Analysis", "Exploratory Data Analysis", "Experimental Data Algorithm", "Exact Data Approach"], 
+        "answer": "b"},
+        {"id": 10, "question": "Which of the following is a type of supervised learning algorithm?", 
+        "options": ["K-Means", "Linear Regression", "DBSCAN", "Apriori"], 
+        "answer": "b"}
+    ]
+
+    cursor.close()
+    return render_template('ds_exam.html', student_name=student_name, course_code=course_code, questions=questions)
+
+# Define the function to generate HTML content for results
+def generate_results_html(answers, correct_answers):
+    results_html = ""
+    for question_id, selected_option in answers.items():
+        if question_id == "course_code":
+            output = question_id
+        else:
+            question_number = question_id[1:]  # Extract question number (e.g., 'q1' -> '1')
+            correct_answer = correct_answers.get(f'q{question_number}')
+            is_correct = selected_option == correct_answer
+            
+            # Apply different styles based on correctness
+            color = "green" if is_correct else "red"
+            results_html += f'<p style="color:{color}">Question {question_number}: {"Correct" if is_correct else "Incorrect"}</p>'
+
+    return results_html
+
+
+@app.route('/submit_exam/<int:course_code>', methods=['POST'])
+def submit_exam(course_code):
+    cursor = mysql.connection.cursor()
+    student_id = session.get('student_id')
+    answers = request.form.to_dict()  # This will get all the form data as a dictionary
+    
+    # Define correct answers
+    correct_answers = {
+        "q1": "a",
+        "q2": "b",
+        "q3": "b",
+        "q4": "b",
+        "q5": "b",
+        "q6": "b",
+        "q7": "a",
+        "q8": "a",
+        "q9": "b",
+        "q10": "b"
+    }
+    
+    # Insert default marks for the student
+    cursor.execute("INSERT INTO exams (course_code, student_id, q1_mark, q2_mark, q3_mark, q4_mark, q5_mark, q6_mark, q7_mark, q8_mark, q9_mark, q10_mark) VALUES (%s, %s, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)", 
+                   (course_code, student_id))
+    
+    total_marks = 0
+    # Logic to calculate marks and update exam table
+    for i in range(1, 11):
+        question_id = f'q{i}'
+        selected_option = answers.get(question_id)
+        if selected_option == correct_answers[question_id]:
+            total_marks += 2
+            cursor.execute(f"UPDATE exams SET q{i}_mark = 2 WHERE course_code = %s AND student_id = %s", (course_code, student_id))
+        else:
+            cursor.execute(f"UPDATE exams SET q{i}_mark = 0 WHERE course_code = %s AND student_id = %s", (course_code, student_id))
+
+    # Update total marks
+    cursor.execute("UPDATE exams SET total_mark = %s WHERE course_code = %s AND student_id = %s", (total_marks, course_code, student_id))
+    cursor.execute("UPDATE enrollment_status SET total_point = total_point + %s WHERE course_code = %s AND student_id = %s", (total_marks, course_code, student_id))
+    mysql.connection.commit()
+    cursor.close()
+
+    # Generate HTML for results to be displayed
+    results_html = generate_results_html(answers, correct_answers)
+
+    return jsonify({"total_points": total_marks, "results_html": results_html})
+
+#====================================python_exam_part====================================================================================================
+
+@app.route('/python_exam/<int:course_code>')
+def python_exam(course_code):
+    cursor = mysql.connection.cursor()
+
+    # Fetch student information
+    student_id = session.get('student_id')
+    if not student_id:
+        return redirect('/login')
+
+    cursor.execute("SELECT name FROM students WHERE student_id = %s", (student_id,))
+    student = cursor.fetchone()
+    student_name = student[0]
+    
+    # Fetch questions (predefined in this example)
+    questions = [
+        {"id": 1, "question": "Which of the following is a key feature of Python?", 
+        "options": ["Statically typed", "Interpreted", "Complex syntax", "Limited to web development"], 
+        "answer": "b"},
+        {"id": 2, "question": "What is the correct extension for a Python file?", 
+        "options": [".pyth", ".py", ".pt", ".p"], 
+        "answer": "b"},
+        {"id": 3, "question": "Which keyword is used to define a function in Python?", 
+        "options": ["func", "function", "def", "define"], 
+        "answer": "c"},
+        {"id": 4, "question": "How do you print a message in Python?", 
+        "options": ["echo 'Hello'", "print('Hello')", "printf('Hello')", "println('Hello')"], 
+        "answer": "b"},
+        {"id": 5, "question": "Which of the following data types is immutable in Python?", 
+        "options": ["List", "Set", "Dictionary", "Tuple"], 
+        "answer": "d"},
+        {"id": 6, "question": "What does 'PEP' stand for in the Python community?", 
+        "options": ["Python Enhanced Proposal", "Python Enhancement Process", "Python Enhancement Proposal", "Programming Easy Protocol"], 
+        "answer": "c"},
+        {"id": 7, "question": "Which built-in Python function can be used to get the length of a list?", 
+        "options": ["size()", "len()", "length()", "get_length()"], 
+        "answer": "b"},
+        {"id": 8, "question": "What is the output of the following code: print(type(5))?", 
+        "options": ["<class 'int'>", "<type 'integer'>", "int", "integer"], 
+        "answer": "a"},
+        {"id": 9, "question": "Which symbol is used for comments in Python?", 
+        "options": ["//", "#", "/* */", "%%"], 
+        "answer": "b"},
+        {"id": 10, "question": "What does the 'pass' statement do in Python?", 
+        "options": ["Exits a loop", "Does nothing", "Breaks a function", "Continues the program with an error"], 
+        "answer": "b"}
+    ]
+
+    cursor.close()
+    return render_template('python_exam.html', student_name=student_name, course_code=course_code, questions=questions)
+
+# Define the function to generate HTML content for results
+def generate_results_html(answers, correct_answers):
+    results_html = ""
+    for question_id, selected_option in answers.items():
+        if question_id == "course_code":
+            output = question_id
+        else:
+            question_number = question_id[1:]  # Extract question number (e.g., 'q1' -> '1')
+            correct_answer = correct_answers.get(f'q{question_number}')
+            is_correct = selected_option == correct_answer
+            
+            # Apply different styles based on correctness
+            color = "green" if is_correct else "red"
+            results_html += f'<p style="color:{color}">Question {question_number}: {"Correct" if is_correct else "Incorrect"}</p>'
+
+    return results_html
+
+@app.route('/submit_python_exam/<int:course_code>', methods=['POST'])
+def submit_python_exam(course_code):
+    cursor = mysql.connection.cursor()
+    student_id = session.get('student_id')
+    answers = request.form.to_dict()  # This will get all the form data as a dictionary
+    
+    # Define correct answers
+    correct_answers = {
+        "q1": "b",
+        "q2": "b",
+        "q3": "c",
+        "q4": "b",
+        "q5": "d",
+        "q6": "c",
+        "q7": "b",
+        "q8": "a",
+        "q9": "b",
+        "q10": "b"
+    }
+    
+    # Insert default marks for the student
+    cursor.execute("INSERT INTO exams (course_code, student_id, q1_mark, q2_mark, q3_mark, q4_mark, q5_mark, q6_mark, q7_mark, q8_mark, q9_mark, q10_mark) VALUES (%s, %s, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)", 
+                   (course_code, student_id))
+    
+    total_marks = 0
+    # Logic to calculate marks and update exam table
+    for i in range(1, 11):
+        question_id = f'q{i}'
+        selected_option = answers.get(question_id)
+        if selected_option == correct_answers[question_id]:
+            total_marks += 2
+            cursor.execute(f"UPDATE exams SET q{i}_mark = 2 WHERE course_code = %s AND student_id = %s", (course_code, student_id))
+        else:
+            cursor.execute(f"UPDATE exams SET q{i}_mark = 0 WHERE course_code = %s AND student_id = %s", (course_code, student_id))
+    
+    # Update total marks
+    cursor.execute("UPDATE exams SET total_mark = %s WHERE course_code = %s AND student_id = %s", (total_marks, course_code, student_id))
+    cursor.execute("UPDATE enrollment_status SET total_point = total_point + %s WHERE course_code = %s AND student_id = %s", (total_marks, course_code, student_id))
+    mysql.connection.commit()
+    cursor.close()
+
+    # Generate HTML for results to be displayed
+    results_html = generate_results_html(answers, correct_answers)
+
+    return jsonify({"total_points": total_marks, "results_html": results_html})
+
+#==================================stat_exam_part=======================================================================================================================
+
+@app.route('/stat_exam/<int:course_code>')
+def stat_exam(course_code):
+    cursor = mysql.connection.cursor()
+
+    # Fetch student information
+    student_id = session.get('student_id')
+    if not student_id:
+        return redirect('/login')
+
+    cursor.execute("SELECT name FROM students WHERE student_id = %s", (student_id,))
+    student = cursor.fetchone()
+    student_name = student[0]
+    
+    # Fetch Statistics questions (predefined in this example)
+    questions = [
+        {"id": 1, "question": "What is the mean of the numbers 2, 4, 6, 8, 10?", 
+        "options": ["4", "6", "8", "10"], 
+        "answer": "b"},
+        {"id": 2, "question": "What does the median represent in a dataset?", 
+        "options": ["The average value", "The middle value", "The most frequent value", "The range"], 
+        "answer": "b"},
+        {"id": 3, "question": "Which of the following measures dispersion in a dataset?", 
+        "options": ["Mean", "Median", "Standard Deviation", "Mode"], 
+        "answer": "c"},
+        {"id": 4, "question": "What does a histogram primarily display?", 
+        "options": ["Relationships between variables", "Data distribution", "Time series data", "Categorical data"], 
+        "answer": "b"},
+        {"id": 5, "question": "What is a p-value used for in statistics?", 
+        "options": ["To measure dispersion", "To test hypotheses", "To calculate averages", "To determine sample size"], 
+        "answer": "b"},
+        {"id": 6, "question": "Which of the following is an example of a continuous variable?", 
+        "options": ["Number of cars", "Temperature", "Type of fruit", "Gender"], 
+        "answer": "b"},
+        {"id": 7, "question": "What is the purpose of regression analysis?", 
+        "options": ["To find the mean", "To analyze relationships between variables", "To calculate probabilities", "To visualize data"], 
+        "answer": "b"},
+        {"id": 8, "question": "Which term describes the most frequent value in a dataset?", 
+        "options": ["Mean", "Median", "Mode", "Variance"], 
+        "answer": "c"},
+        {"id": 9, "question": "What is the range of a dataset?", 
+        "options": ["The average value", "The difference between the maximum and minimum values", "The middle value", "The variance"], 
+        "answer": "b"},
+        {"id": 10, "question": "What does correlation measure?", 
+        "options": ["Causation between variables", "Strength and direction of a relationship between variables", "Average of variables", "Variation in data"], 
+        "answer": "b"}
+    ]
+
+    cursor.close()
+    return render_template('stat_exam.html', student_name=student_name, course_code=course_code, questions=questions)
+
+# Define the function to generate HTML content for results
+def generate_results_html(answers, correct_answers):
+    results_html = ""
+    for question_id, selected_option in answers.items():
+        if question_id == "course_code":
+            output = question_id
+        else:
+            question_number = question_id[1:]  # Extract question number (e.g., 'q1' -> '1')
+            correct_answer = correct_answers.get(f'q{question_number}')
+            is_correct = selected_option == correct_answer
+            
+            # Apply different styles based on correctness
+            color = "green" if is_correct else "red"
+            results_html += f'<p style="color:{color}">Question {question_number}: {"Correct" if is_correct else "Incorrect"}</p>'
+
+    return results_html
+
+@app.route('/submit_stat_exam/<int:course_code>', methods=['POST'])
+def submit_stat_exam(course_code):
+    cursor = mysql.connection.cursor()
+    student_id = session.get('student_id')
+    answers = request.form.to_dict()  # This will get all the form data as a dictionary
+    
+    # Define correct answers
+    correct_answers = {
+        "q1": "b",
+        "q2": "b",
+        "q3": "c",
+        "q4": "b",
+        "q5": "b",
+        "q6": "b",
+        "q7": "b",
+        "q8": "c",
+        "q9": "b",
+        "q10": "b"
+    }
+    
+    # Insert default marks for the student
+    cursor.execute("INSERT INTO exams (course_code, student_id, q1_mark, q2_mark, q3_mark, q4_mark, q5_mark, q6_mark, q7_mark, q8_mark, q9_mark, q10_mark) VALUES (%s, %s, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)", 
+                   (course_code, student_id))
+    
+    total_marks = 0
+    # Logic to calculate marks and update exam table
+    for i in range(1, 11):
+        question_id = f'q{i}'
+        selected_option = answers.get(question_id)
+        if selected_option == correct_answers[question_id]:
+            total_marks += 2
+            cursor.execute(f"UPDATE exams SET q{i}_mark = 2 WHERE course_code = %s AND student_id = %s", (course_code, student_id))
+        else:
+            cursor.execute(f"UPDATE exams SET q{i}_mark = 0 WHERE course_code = %s AND student_id = %s", (course_code, student_id))
+    
+    # Update total marks
+    cursor.execute("UPDATE exams SET total_mark = %s WHERE course_code = %s AND student_id = %s", (total_marks, course_code, student_id))
+    cursor.execute("UPDATE enrollment_status SET total_point = total_point + %s WHERE course_code = %s AND student_id = %s", (total_marks, course_code, student_id))
+    mysql.connection.commit()
+    cursor.close()
+
+    # Generate HTML for results to be displayed
+    results_html = generate_results_html(answers, correct_answers)
+
+    return jsonify({"total_points": total_marks, "results_html": results_html})
+
+#=====================================cyber_security_exam_part===================================================================================================================
+
+@app.route('/cyber_security_exam/<int:course_code>')
+def cyber_security_exam(course_code):
+    cursor = mysql.connection.cursor()
+
+    # Fetch student information
+    student_id = session.get('student_id')
+    if not student_id:
+        return redirect('/login')
+
+    cursor.execute("SELECT name FROM students WHERE student_id = %s", (student_id,))
+    student = cursor.fetchone()
+    student_name = student[0]
+    
+   # Cyber Security Fundamentals questions
+    questions = [
+        {"id": 1, "question": "What is the main purpose of a firewall?", 
+        "options": ["To detect viruses", "To block unauthorized access", "To encrypt data", "To monitor bandwidth"], 
+        "answer": "b"},
+        {"id": 2, "question": "Which of the following is an example of two-factor authentication?", 
+        "options": ["Username and password", "Password and security question", "Password and OTP", "Biometric scan only"], 
+        "answer": "c"},
+        {"id": 3, "question": "What does the term 'phishing' refer to?", 
+        "options": ["Hacking into a system", "Tricking someone into sharing sensitive information", "Scanning networks for vulnerabilities", "Encrypting files for ransom"], 
+        "answer": "b"},
+        {"id": 4, "question": "Which protocol is used to securely transfer data over the internet?", 
+        "options": ["HTTP", "FTP", "HTTPS", "SMTP"], 
+        "answer": "c"},
+        {"id": 5, "question": "What is the role of encryption in cybersecurity?", 
+        "options": ["To detect malware", "To hide data", "To ensure data confidentiality", "To block network traffic"], 
+        "answer": "c"},
+        {"id": 6, "question": "What is the primary purpose of a VPN?", 
+        "options": ["To enhance internet speed", "To secure online communications", "To block advertisements", "To detect threats"], 
+        "answer": "b"},
+        {"id": 7, "question": "Which of the following is an example of malware?", 
+        "options": ["Firewall", "Antivirus software", "Ransomware", "Encryption"], 
+        "answer": "c"},
+        {"id": 8, "question": "What is a 'zero-day vulnerability'?", 
+        "options": ["A bug in software discovered after a patch", "A newly discovered vulnerability with no fix", "An outdated software feature", "A failed cybersecurity audit"], 
+        "answer": "b"},
+        {"id": 9, "question": "What does 'DoS' stand for in cybersecurity?", 
+        "options": ["Data on Security", "Denial of Service", "Domain of Servers", "Deployment of Security"], 
+        "answer": "b"},
+        {"id": 10, "question": "Which of these is an example of social engineering?", 
+        "options": ["Installing spyware", "Creating a strong password", "Impersonating someone to gain access", "Using a VPN for secure access"], 
+        "answer": "c"}
+    ]
+
+    cursor.close()
+    return render_template('cyber_security_exam.html', student_name=student_name, course_code=course_code, questions=questions)
+
+# Define the function to generate HTML content for results
+def generate_results_html(answers, correct_answers):
+    results_html = ""
+    for question_id, selected_option in answers.items():
+        if question_id == "course_code":
+            output = question_id
+        else:
+            question_number = question_id[1:]  # Extract question number (e.g., 'q1' -> '1')
+            correct_answer = correct_answers.get(f'q{question_number}')
+            is_correct = selected_option == correct_answer
+            
+            # Apply different styles based on correctness
+            color = "green" if is_correct else "red"
+            results_html += f'<p style="color:{color}">Question {question_number}: {"Correct" if is_correct else "Incorrect"}</p>'
+
+    return results_html
+
+@app.route('/submit_cyber_security_exam/<int:course_code>', methods=['POST'])
+def submit_cyber_security_exam(course_code):
+    cursor = mysql.connection.cursor()
+    student_id = session.get('student_id')
+    answers = request.form.to_dict()  # This will get all the form data as a dictionary
+    
+   # Define correct answers
+    correct_answers = {
+        "q1": "b",
+        "q2": "c",
+        "q3": "b",
+        "q4": "c",
+        "q5": "c",
+        "q6": "b",
+        "q7": "c",
+        "q8": "b",
+        "q9": "b",
+        "q10": "c"
+    }
+    
+    # Insert default marks for the student
+    cursor.execute("INSERT INTO exams (course_code, student_id, q1_mark, q2_mark, q3_mark, q4_mark, q5_mark, q6_mark, q7_mark, q8_mark, q9_mark, q10_mark) VALUES (%s, %s, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)", 
+                   (course_code, student_id))
+    
+    total_marks = 0
+    # Logic to calculate marks and update exam table
+    for i in range(1, 11):
+        question_id = f'q{i}'
+        selected_option = answers.get(question_id)
+        if selected_option == correct_answers[question_id]:
+            total_marks += 2
+            cursor.execute(f"UPDATE exams SET q{i}_mark = 2 WHERE course_code = %s AND student_id = %s", (course_code, student_id))
+        else:
+            cursor.execute(f"UPDATE exams SET q{i}_mark = 0 WHERE course_code = %s AND student_id = %s", (course_code, student_id))
+    
+    # Update total marks
+    cursor.execute("UPDATE exams SET total_mark = %s WHERE course_code = %s AND student_id = %s", (total_marks, course_code, student_id))
+    cursor.execute("UPDATE enrollment_status SET total_point = total_point + %s WHERE course_code = %s AND student_id = %s", (total_marks, course_code, student_id))
+    mysql.connection.commit()
+    cursor.close()
+
+    # Generate HTML for results to be displayed
+    results_html = generate_results_html(answers, correct_answers)
+
+    return jsonify({"total_points": total_marks, "results_html": results_html})
+
+
 @app.route('/logout')
 def logout():
     session.pop('student_name', None)  # Remove the student's name from the session
