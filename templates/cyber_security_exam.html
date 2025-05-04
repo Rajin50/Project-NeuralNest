@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation for Introduction to Data Science</title>
+    <link rel="stylesheet" href="/static/css/exam.css">
+    <script src="/static/js/cyber_security_exam.js" defer></script>
+</head>
+<body>
+    <div class="exam-container">
+        <h1>Exam: Cyber Security Fundamentals<br></h1>
+        <div class="header">
+            <div class="candidate-info">
+                <p>Candidate Name: {{ student_name }}</p>
+                <p>Total Points: 20 (Each question: 2 points)</p>
+            </div>
+            <div class="timer">
+                <p>Remaining Time: <span id="time-remaining">15:00</span></p>
+            </div>
+        </div>
+        <div class="questions-section">
+            <form id="exam-form" action="/submit_cyber_security_exam" method="POST">
+                <input type="hidden" name="course_code" value="{{ course_code }}">
+                {% for question in questions %}
+                <div class="question">
+                    <h3>Q{{ loop.index }}: {{ question['question'] }}</h3>
+                    <div class="options">
+                        <label><input type="radio" name="q{{ question['id'] }}" value="a"> {{ question['options'][0] }}</label>
+                        <label><input type="radio" name="q{{ question['id'] }}" value="b"> {{ question['options'][1] }}</label>
+                        <label><input type="radio" name="q{{ question['id'] }}" value="c"> {{ question['options'][2] }}</label>
+                        <label><input type="radio" name="q{{ question['id'] }}" value="d"> {{ question['options'][3] }}</label>
+                    </div>
+                </div>
+                {% endfor %}
+                <button type="button" class="submit-button" onclick="submitExam()">Submit Exam</button>
+            </form>
+        </div>
+        <div id="results" class="hidden">
+            <h3>Total Points: <span id="total-points"></span></h3>
+            <div id="detailed-results"></div>
+        </div>
+    </div>
+</body>
+</html>
