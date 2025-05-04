@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&family=Cookie&family=Meddon&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playwrite+IS:wght@100..400&family=Sriracha&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&family=Meddon&family=Playwrite+IS:wght@100..400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&family=Meddon&family=Playwrite+IS:wght@100..400&family=Sriracha&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&family=Meddon&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playwrite+IS:wght@100..400&family=Sriracha&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color:rgb(177, 174, 174);
+            position: relative;
+        }
+
+        .download-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color:rgb(77, 207, 224);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background-color: rgb(115, 195, 206);
+        }
+
+        .certificate-container {
+            width: 850px;
+            height: 540px;
+            background: white;
+            border: 3px solid #00e0ff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            position: relative;
+        }
+
+        .left-section {
+            width: 30%;
+            background-color: #00e0ff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .left-section img {
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .certificate-id {
+            color: white;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .right-section {
+            width: 70%;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        .certificate-title {
+            color: #00e0ff;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .website-url {
+            position: absolute;
+            top: 13%;
+            right: -20px; /* Adjust as needed for proper alignment */
+            transform: rotate(-90deg); /* Rotate the text 90 degrees */
+            transform-origin: center;
+            font-size: 16px;
+            color: white;
+            background-color: #00e0ff;
+            padding: 5px 10px;
+            text-align: center;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .presented-to {
+            font-size: 20px;
+            margin-top: 50px;
+            color: #6e6e6e;
+        }
+
+        .student-name {
+            font-family: "Charmonman", serif;
+            font-size: 50px;
+            color: #00e0ff;
+            margin: 10px 0;
+            margin-bottom: -3px;
+            font-weight: bold;
+        }
+
+        .course-details {
+            font-family: "Playwrite IS", serif;
+            font-size: 16px;
+            margin-top: 2px;
+            color: #6e6e6e;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .signature {
+            text-align: center;
+        }
+
+        .signature img {
+            max-width: 150px;
+            margin-bottom: -7px;
+        }
+
+        .signature-name {
+            font-family: "Sriracha", serif;
+            font-size: 16px;
+            margin-top: 1px;  
+        }
+
+        .designation {
+            font-family: "Montserrat", serif;
+            font-size: 13px;
+            color:rgb(87, 84, 84);
+        }
+
+        .date-issued {
+            font-size: 14px;
+            margin-top: 25px;
+            color: #6e6e6e;
+        }
+    </style>
+
+</head>
+<body>
+    <button class="download-btn" onclick="downloadCertificate()">Download Certificate</button>
+    <div class="certificate-container" id="certificate">
+        <div class="left-section">
+            <img src="/static/uploads/neuralnest_logo.png" alt="Company Logo">
+            <img src="/static/uploads/best_achievement.png" alt="Best Achievement Logo">
+            <div class="certificate-id">Certificate ID No: {{ certificate_id }}</div>
+        </div>
+        <div class="right-section">
+            <div class="certificate-title">CERTIFICATE OF COURSE COMPLETION</div>
+            <div class="website-url"><span>www.neuralnest.ac.bd</span></div>
+
+            <div class="presented-to">PROUDLY PRESENTED TO</div>
+            <div class="student-name">{{ student_name }}</div>
+
+            <div class="course-details">
+                For completing the course of <strong>{{ course_name }}</strong>, arranged by NEURALNEST.
+            </div>
+
+            <div class="date-issued">
+                Date: <strong>{{ current_date }}</strong> &nbsp; &nbsp;  Issued by:  <strong>NEURALNEST</strong>
+            </div>
+
+            <div class="footer">
+                <div class="signature">
+                    <img src="/static/uploads/sign_rajin.png" alt="Signature">
+                    <div class="signature-name">Rajin Ibna Rajuanur Rahman</div>
+                    <div class="designation">CEO and CTO at NEURALNEST</div>
+                </div>
+
+                <div class="signature">
+                    <img src="/static/uploads/sign_prantik.png" alt="Signature">
+                    <div class="signature-name">Nazmus Sakib Prantik</div>
+                    <div class="designation">Managing Director at NEURALNEST</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for downloading PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        function downloadCertificate() {
+            const element = document.getElementById('certificate');
+            const options = {
+                margin: [30, 30],
+                filename: 'certificate.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+
+            html2pdf().set(options).from(element).save();
+        }
+    </script>
+</body>
+</html>

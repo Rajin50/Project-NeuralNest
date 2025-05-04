@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Browse Courses - NeuralNest</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #00e0ff;
+            letter-spacing: 1px;
+        }
+
+        .navbar .nav-buttons a {
+            margin-left: 1.5rem;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .navbar .nav-buttons a:hover {
+            color: #00e0ff;
+        }
+
+        .navbar .nav-buttons a::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            background: #00e0ff;
+            left: 0;
+            bottom: -4px;
+            transition: 0.3s;
+        }
+
+        .navbar .nav-buttons a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        .courses {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .courses h2 {
+            font-size: 2rem;
+            color: #00e0ff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Search Section */
+        .search-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            flex: 1 1 300px;
+            min-width: 280px;
+        }
+
+        .search-box label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .search-box input,
+        .search-box select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            background-color: #f5f5f5;
+            font-size: 1rem;
+        }
+
+        .search-box input::placeholder {
+            color: #888;
+        }
+
+        .suggestions {
+            margin-top: 10px;
+            color: #ccc;
+        }
+
+        /* Course Cards */
+        .courses-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .course-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: slideUp 0.5s ease forwards;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 30px rgba(0, 224, 255, 0.4);
+        }
+
+        .course-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .course-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #00e0ff;
+        }
+
+        .course-card p {
+            font-size: 0.95rem;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        /* Button */
+        .course-card button {
+            margin-top: auto;
+            padding: 10px 20px;
+            background-color: #00e0ff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .course-card button:hover {
+            background-color: #00bcd4;
+            transform: scale(1.05);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Tweaks */
+        @media screen and (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .navbar .nav-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="nav-buttons">
+            <a href="{{ url_for('student_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('get_courses') }}">Browse Courses</a>
+            <a href="{{ url_for('profile') }}">Profile</a>
+            <a href="{{ url_for('certifications') }}">Certifications</a>
+            <a href="{{ url_for('logout') }}">Log Out</a>
+        </div>
+    </div>
+
+    <div class="courses">
+        <h2>All Courses</h2>
+    
+        <!-- Search Boxes -->
+        <div class="search-container">
+            <div class="search-box">
+                <label for="search-course">Search Course by Name:</label>
+                <input id="search-course" type="text" placeholder="Type course name..." oninput="searchByName(this.value)">
+                <div id="suggestions" class="suggestions"></div>
+            </div>
+    
+            <div class="search-box">
+                <label for="filter-category">Filter by Category:</label>
+                <select id="filter-category" onchange="searchByCategory(this.value)">
+                    <option value="" disabled selected>Choose Category</option>
+                    <option value="Cyber Security">Cyber Security</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Python">Python</option>
+                </select>
+            </div>
+        </div>
+    
+        <!-- Courses Display -->
+        <div id="courses-container" class="courses-container">
+            <!-- Cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+        }
+    </script>
+
+    <script>
+         // Fetch and render all courses initially
+        window.onload = () => {
+            fetchCourses();
+        };
+
+        function fetchCourses(query = null, filter = null) {
+            fetch('/get_courses', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query, filter }),
+            })
+                .then(response => response.json())
+                .then(data => renderCourses(data))
+                .catch(error => console.error('Error fetching courses:', error));
+        }
+
+        function renderCourses(response) {
+            const courses = response.data; // Correctly access the courses data
+            const container = document.getElementById('courses-container');
+            container.innerHTML = '';
+        
+            if (!courses || courses.length === 0) {
+                container.innerHTML = '<p>No courses found.</p>';
+                return;
+            }
+        
+            courses.forEach(course => {
+                const card = `
+                    <div class="course-card">
+                        <img src="${course.course_picture}" alt="${course.course_name}">
+                        <h3>${course.course_name}</h3>
+                        <p>Instructor: ${course.instructor_name}</p>
+                        <p>${course.description}</p>
+                        <button onclick="location.href='/enroll_course/${course.course_code}'">Enroll Now</button>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+        
+        function searchByName(input) {
+            document.getElementById('filter-category').selectedIndex = 0; // Reset category dropdown
+            if (input) fetchCourses(input, null);
+        }
+        
+        function searchByCategory(category) {
+            document.getElementById('search-course').value = ''; // Clear the search input box
+            if (category) fetchCourses(null, category);
+        }        
+
+        function viewCourse(courseCode) {
+            alert(`View details for course code: ${courseCode}`);
+            // Implement course detail view logic
+        }
+    </script>
+
+</body>
+</html>

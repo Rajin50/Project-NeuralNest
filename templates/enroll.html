@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrollment Confirmation</title>
+
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #00e0ff;
+            letter-spacing: 1px;
+        }
+
+        .navbar .nav-buttons a {
+            margin-left: 1.5rem;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .navbar .nav-buttons a:hover {
+            color: #00e0ff;
+        }
+
+        .navbar .nav-buttons a::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            background: #00e0ff;
+            left: 0;
+            bottom: -4px;
+            transition: 0.3s;
+        }
+
+        .navbar .nav-buttons a:hover::after {
+            width: 100%;
+        }
+
+        /* Confirmation Box */
+        .confirmation-box {
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            margin: 80px auto;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: fadeSlideIn 1s ease forwards;
+        }
+
+        .confirmation-box h2 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #00e0ff;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .buttons button {
+            padding: 12px 24px;
+            background: #00e0ff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .buttons button:hover {
+            background: #00bcd4;
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(0, 224, 255, 0.4);
+        }
+
+        /* Animations */
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .navbar .nav-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .confirmation-box {
+                margin: 50px 20px;
+                padding: 30px 20px;
+            }
+
+            .confirmation-box h2 {
+                font-size: 1.5rem;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .buttons button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="nav-buttons">
+            <a href="{{ url_for('student_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('get_courses') }}">Browse Courses</a>
+            <a href="{{ url_for('profile') }}">Profile</a>
+            <a href="{{ url_for('certifications') }}">Certifications</a>
+            <a href="{{ url_for('logout') }}">Log Out</a>
+        </div>
+    </div>
+
+    <!-- Enrollment confirmation box -->
+
+    {% if message %}
+    <div class="confirmation-box">
+        <h2>{{ message }}</h2>
+        <div class="buttons">
+            <button onclick="location.href='/view_course/{{ course_code }}'">View Course</button>
+            <button onclick="location.href='/student_dashboard'">Go Back</button>
+        </div>
+    </div>
+    {% else %}
+    <div class="confirmation-box">
+        <h2>You've successfully enrolled in the {{ course_name }} course!</h2>
+        <div class="buttons">
+            <button onclick="location.href='/view_course/{{ course_code }}'">View Course</button>
+            <button onclick="location.href='/student_dashboard'">Go Back</button>
+        </div>
+    </div>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certifications - NeuralNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e1f26, #2c3e50);
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #00e0ff;
+            letter-spacing: 1px;
+        }
+
+        .navbar .nav-buttons a {
+            margin-left: 1.5rem;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .navbar .nav-buttons a:hover {
+            color: #00e0ff;
+        }
+
+        .navbar .nav-buttons a::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            background: #00e0ff;
+            left: 0;
+            bottom: -4px;
+            transition: 0.3s;
+        }
+
+        .navbar .nav-buttons a:hover::after {
+            width: 100%;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* Certification Cards */
+        .cert-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            animation: fadeSlideIn 1s ease;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 224, 255, 0.2);
+        }
+
+        .cert-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cert-card-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .cert-card-content h3 {
+            font-size: 1.4rem;
+            color: #00e0ff;
+            margin-bottom: 10px;
+        }
+
+        .cert-card-content p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+
+        .cert-card-content button {
+            padding: 10px 20px;
+            border: none;
+            background: #00e0ff;
+            color: #000;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .cert-card-content button:hover {
+            background: #00bcd4;
+            transform: scale(1.05);
+        }
+
+        /* No course message */
+        .no-courses-box {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            padding: 40px 30px;
+            border-radius: 20px;
+            color: #ff7070;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            animation: fadeSlideIn 1s ease;
+        }
+
+        /* Animation */
+        @keyframes fadeSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Adjustments */
+        @media screen and (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .navbar .nav-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .cert-card-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .cert-card-content p {
+                font-size: 0.95rem;
+            }
+
+            .cert-card-content button {
+                font-size: 0.95rem;
+                width: 100%;
+            }
+        }
+
+    </style>
+    
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="nav-buttons">
+            <a href="{{ url_for('student_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('get_courses') }}">Browse Courses</a>
+            <a href="{{ url_for('profile') }}">Profile</a>
+            <a href="{{ url_for('certifications') }}">Certifications</a>
+            <a href="{{ url_for('logout') }}">Log Out</a>
+        </div>
+    </div>
+
+    <div class="container">
+        {% if certifications %}
+            {% for cert in certifications %}
+            <div class="cert-card">
+                <img src="{{ cert['course_picture'] }}" alt="Course Picture">
+                <div class="cert-card-content">
+                    <h3>{{ cert['course_name'] }}</h3>
+                    <p>Congratulations for completing the course successfully!</p>
+                    <button onclick="window.location.href='{{ url_for('get_certificate', course_code=cert['course_code']) }}'">Get Certificate</button>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="no-courses-box">
+            <p>You've not completed any courses yet! <br> To get a certificate, you need to complete a course.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>
+
