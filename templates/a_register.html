@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Register - NeuralNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-blue: #0ff0fc;
+            --neon-pink: #ff2a6d;
+            --neon-purple: #d300c5;
+            --cyber-yellow: #f9f002;
+            --dark-space: #0d0221;
+            --deep-space: #1b0b3a;
+            --matrix-green: #00ff41;
+            --hologram-blue: rgba(0, 255, 252, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--dark-space);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Holographic Background */
+        .hologram-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(15, 2, 33, 0.9) 0%, rgba(27, 11, 58, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2232&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            z-index: -2;
+            animation: bgPulse 15s infinite alternate;
+        }
+
+        @keyframes bgPulse {
+            0% { opacity: 0.9; }
+            100% { opacity: 1; }
+        }
+
+        .hologram-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 255, 252, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 252, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            animation: gridMove 80s linear infinite;
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: -800px 800px; }
+        }
+
+        /* Cyberpunk Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 5%;
+            z-index: 1000;
+            background: rgba(13, 2, 33, 0.8);
+            border-bottom: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 255, 252, 0.2);
+            animation: slideDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: transparent;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-decoration: none;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .logo:hover {
+            text-shadow: 0 0 15px rgba(0, 255, 252, 0.7);
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            position: relative;
+            padding: 8px 0;
+            transition: all 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-pink);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--neon-blue);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Registration Container */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 100px;
+        }
+
+        /* Holographic Registration Form */
+        .registration-form {
+            background: rgba(13, 2, 33, 0.7);
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 0 40px rgba(0, 255, 252, 0.3),
+                        inset 0 0 30px rgba(0, 255, 252, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: hologramAppear 1s ease-out forwards;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes hologramAppear {
+            from { 
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+                box-shadow: 0 0 100px rgba(0, 255, 252, 0.5);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                box-shadow: 0 0 40px rgba(0, 255, 252, 0.3);
+            }
+        }
+
+        .registration-form::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent 45%,
+                rgba(0, 255, 252, 0.1) 50%,
+                transparent 55%
+            );
+            transform: rotate(30deg);
+            animation: shine 8s infinite;
+            z-index: -1;
+        }
+
+        .registration-form h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: transparent;
+            background: linear-gradient(90deg, var(--neon-blue), var(--cyber-yellow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 255, 252, 0.3);
+            position: relative;
+        }
+
+        .registration-form h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-pink), transparent);
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+            animation: formGroupAppear 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes formGroupAppear {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.2s; }
+        .form-group:nth-child(2) { animation-delay: 0.3s; }
+        .form-group:nth-child(3) { animation-delay: 0.4s; }
+        .form-group:nth-child(4) { animation-delay: 0.5s; }
+        .form-group:nth-child(5) { animation-delay: 0.6s; }
+        .form-group:nth-child(6) { animation-delay: 0.7s; }
+        .form-group:nth-child(7) { animation-delay: 0.8s; }
+        .form-group:nth-child(8) { animation-delay: 0.9s; }
+        .form-group:nth-child(9) { animation-delay: 1s; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: var(--neon-blue);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Rajdhani', sans-serif;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 15px rgba(255, 42, 109, 0.5);
+            transform: translateY(-2px);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230ff0fc' width='24px' height='24px'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+        }
+
+        /* File Input Customization */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed var(--neon-blue);
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            background: rgba(0, 0, 0, 0.4);
+            border-color: var(--neon-pink);
+        }
+
+        .file-input-label i {
+            margin-right: 10px;
+            color: var(--neon-blue);
+        }
+
+        /* Submit Button */
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border: none;
+            border-radius: 5px;
+            color: var(--dark-space);
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            margin-top: 20px;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-pink), var(--cyber-yellow));
+            transition: all 0.4s;
+            z-index: -1;
+        }
+
+        .btn-primary:hover {
+            color: var(--dark-space);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 255, 252, 0.5);
+        }
+
+        .btn-primary:hover::before {
+            left: 0;
+        }
+
+        /* Holographic Effects */
+        .hologram-line {
+            position: absolute;
+            height: 100%;
+            width: 2px;
+            background: var(--neon-blue);
+            left: 20px;
+            top: 0;
+            opacity: 0.3;
+            animation: hologramScan 3s infinite;
+        }
+
+        @keyframes hologramScan {
+            0% { top: -100%; opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 15px;
+            }
+
+            .navbar-right {
+                margin-top: 15px;
+            }
+
+            .nav-link {
+                margin: 0 15px;
+            }
+
+            .registration-form {
+                padding: 30px 20px;
+            }
+
+            .registration-form h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .registration-form {
+                padding: 25px 15px;
+            }
+
+            .registration-form h2 {
+                font-size: 1.6rem;
+            }
+
+            .form-control {
+                padding: 12px;
+            }
+
+            .btn-primary {
+                padding: 12px;
+            }
+        }
+
+        /* Floating Cyber Orbs */
+        .cyber-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            animation: floatOrb linear infinite;
+        }
+
+        @keyframes floatOrb {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(100vw, -100vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Holographic Background -->
+    <div class="hologram-bg"></div>
+    <div class="hologram-grid"></div>
+    <div class="cyber-orbs" id="cyberOrbs"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/" class="logo">NeuralNest</a>
+        </div>
+        <div class="navbar-right">
+            <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+            <a href="{{ url_for('a_login') }}" class="nav-link">Admin Sign In</a>
+        </div>
+    </nav>
+
+    <!-- Registration Form -->
+    <div class="container">
+        <form method="POST" action="{{ url_for('a_register') }}" enctype="multipart/form-data" class="registration-form">
+            <!-- Hologram scan line -->
+            <div class="hologram-line"></div>
+            
+            <h2>Admin Registration</h2>
+            
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.name.label }}
+                {{ form.name(class="form-control", placeholder="Enter full name") }}
+            </div>
+            
+            <div class="form-group">
+                {{ form.phone.label }}
+                {{ form.phone(class="form-control", placeholder="Enter phone number") }}
+            </div>
+            
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email(class="form-control", placeholder="Enter email address") }}
+            </div>
+            
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(class="form-control", placeholder="Create password") }}
+            </div>
+            
+            <div class="form-group">
+                {{ form.address.label }}
+                {{ form.address(class="form-control", placeholder="Enter address") }}
+            </div>
+            
+            <div class="form-group">
+                {{ form.dob.label }}
+                {{ form.dob(class="form-control", type="date") }}
+            </div>
+            
+            <div class="form-group">
+                <label for="bg">Blood Group</label>
+                <select id="bg" name="bg" class="form-control">
+                    <option value="" disabled selected>Select your blood group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <div class="file-input-wrapper">
+                    <label class="file-input-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        {{ form.profile_picture.label.text }}
+                        {{ form.profile_picture(class="form-control", style="display: none;") }}
+                        <span id="file-name">No file chosen</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Create floating cyber orbs
+        document.addEventListener('DOMContentLoaded', function() {
+            const orbsContainer = document.getElementById('cyberOrbs');
+            const colors = [var(--neon-blue), var(--neon-pink), var(--neon-purple)];
+            
+            for (let i = 0; i < 5; i++) {
+                const orb = document.createElement('div');
+                orb.classList.add('orb');
+                
+                // Random properties
+                const size = Math.random() * 300 + 100;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100 + 100;
+                const duration = Math.random() * 40 + 20;
+                const delay = Math.random() * 10;
+                
+                orb.style.width = `${size}px`;
+                orb.style.height = `${size}px`;
+                orb.style.background = color;
+                orb.style.left = `${posX}%`;
+                orb.style.top = `${posY}%`;
+                orb.style.animationDuration = `${duration}s`;
+                orb.style.animationDelay = `-${delay}s`;
+                
+                orbsContainer.appendChild(orb);
+            }
+
+            // File input display
+            const fileInput = document.querySelector('input[type="file"]');
+            const fileNameSpan = document.getElementById('file-name');
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    fileNameSpan.textContent = this.files[0].name;
+                } else {
+                    fileNameSpan.textContent = 'No file chosen';
+                }
+            });
+
+            // Add hologram effect to form
+            const form = document.querySelector('.registration-form');
+            form.addEventListener('mouseenter', function() {
+                this.style.boxShadow = '0 0 50px rgba(0, 255, 252, 0.4), inset 0 0 40px rgba(0, 255, 252, 0.2)';
+            });
+            form.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '0 0 40px rgba(0, 255, 252, 0.3), inset 0 0 30px rgba(0, 255, 252, 0.1)';
+            });
+        });
+    </script>
+</body>
+</html>
