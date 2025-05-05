@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin Profile - NeuralNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-blue: #0ff0fc;
+            --neon-pink: #ff2a6d;
+            --neon-purple: #d300c5;
+            --cyber-yellow: #f9f002;
+            --dark-space: #0d0221;
+            --deep-space: #1b0b3a;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-dark: rgba(15, 12, 41, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--dark-space);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Cyber Grid Background */
+        .cyber-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 255, 252, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 252, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            animation: gridMove 80s linear infinite;
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: -800px 800px; }
+        }
+
+        /* Cyberpunk Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(13, 2, 33, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 255, 252, 0.2);
+            z-index: 1000;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: transparent;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .logo:hover {
+            text-shadow: 0 0 15px rgba(0, 255, 252, 0.7);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-buttons a {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            position: relative;
+            padding: 8px 0;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-pink);
+            transition: width 0.3s;
+        }
+
+        .nav-buttons a:hover {
+            color: var(--neon-blue);
+        }
+
+        .nav-buttons a:hover::after {
+            width: 100%;
+        }
+
+        /* Profile Container */
+        .profile-container {
+            max-width: 1000px;
+            margin: 100px auto 50px;
+            padding: 30px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-container h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: transparent;
+            background: linear-gradient(90deg, var(--neon-blue), var(--cyber-yellow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-container h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), transparent);
+        }
+
+        /* Profile Form */
+        form {
+            background: rgba(13, 2, 33, 0.7);
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 252, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        form::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent 45%,
+                rgba(0, 255, 252, 0.05) 50%,
+                transparent 55%
+            );
+            transform: rotate(30deg);
+            animation: shine 6s infinite;
+            z-index: -1;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(30deg) translate(-30%, -30%); }
+            100% { transform: rotate(30deg) translate(30%, 30%); }
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Profile Image */
+        .profile-img-container {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 255, 252, 0.3);
+            transition: all 0.3s;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.05);
+            border-color: var(--neon-pink);
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 20px;
+            animation: formGroupAppear 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes formGroupAppear {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.2s; }
+        .form-group:nth-child(2) { animation-delay: 0.3s; }
+        .form-group:nth-child(3) { animation-delay: 0.4s; }
+        .form-group:nth-child(4) { animation-delay: 0.5s; }
+        .form-group:nth-child(5) { animation-delay: 0.6s; }
+        .form-group:nth-child(6) { animation-delay: 0.7s; }
+        .form-group:nth-child(7) { animation-delay: 0.8s; }
+        .form-group:nth-child(8) { animation-delay: 0.9s; }
+        .form-group:nth-child(9) { animation-delay: 1s; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--neon-blue);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 15px rgba(255, 42, 109, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .form-group input[disabled] {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* File Input Styling */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 12px;
+            background: rgba(0, 255, 252, 0.1);
+            color: var(--neon-blue);
+            text-align: center;
+            border-radius: 5px;
+            border: 1px dashed var(--neon-blue);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            background: rgba(0, 255, 252, 0.2);
+            border-color: var(--neon-pink);
+        }
+
+        /* Submit Button */
+        button[type="submit"] {
+            grid-column: 1 / -1;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border: none;
+            border-radius: 5px;
+            color: var(--dark-space);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 255, 252, 0.4);
+        }
+
+        /* Floating Cyber Orbs */
+        .cyber-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.2;
+            animation: floatOrb linear infinite;
+        }
+
+        @keyframes floatOrb {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translate(100vw, -100vh);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+            
+            .nav-buttons {
+                flex-wrap: wrap;
+                margin-top: 15px;
+                gap: 10px;
+            }
+            
+            .profile-container {
+                padding: 20px;
+                margin-top: 120px;
+            }
+            
+            .profile-container h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-container {
+                padding: 15px;
+            }
+            
+            .profile-img {
+                width: 150px;
+                height: 150px;
+            }
+            
+            button[type="submit"] {
+                padding: 12px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cyber Background Elements -->
+    <div class="cyber-bg"></div>
+    <div class="cyber-orbs" id="cyberOrbs"></div>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="nav-buttons">
+            <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('all_students') }}">All Students</a>
+            <a href="{{ url_for('all_instructors') }}">All Instructors</a>
+            <a href="{{ url_for('i_register') }}">Add Instructors</a>
+            <a href="{{ url_for('a_profile') }}">Profile</a>
+            <a href="{{ url_for('a_logout') }}">Logout</a>
+        </div>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="profile-container">
+        <h1>Admin Profile</h1>
+        
+        <form method="POST" enctype="multipart/form-data">
+            <div class="profile-info">
+                <div class="profile-img-container">
+                    <img src="{{ admin[8] }}" alt="Profile Picture" class="profile-img">
+                </div>
+                
+                <div class="form-group">
+                    <label for="admin_id">Admin ID</label>
+                    <input type="text" id="admin_id" value="{{ admin[1] }}" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" value="{{ admin[0] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone_no">Phone No</label>
+                    <input type="text" id="phone_no" value="{{ admin[2] }}" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" value="{{ admin[3] }}" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" value="{{ admin[4] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" value="{{ admin[5] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="date_of_birth">Date of Birth</label>
+                    <input type="date" id="date_of_birth" name="date_of_birth" value="{{ admin[6] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="blood_group">Blood Group</label>
+                    <input type="text" id="blood_group" name="blood_group" value="{{ admin[7] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="profile_picture">Profile Picture</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="profile_picture" name="profile_picture">
+                        <label for="profile_picture" class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i> Choose Profile Picture
+                        </label>
+                    </div>
+                </div>
+                <button type="submit">Update Profile</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Create floating cyber orbs
+        document.addEventListener('DOMContentLoaded', function() {
+            const orbsContainer = document.getElementById('cyberOrbs');
+            const colors = ['#0ff0fc', '#ff2a6d', '#d300c5', '#f9f002'];
+            
+            for (let i = 0; i < 5; i++) {
+                const orb = document.createElement('div');
+                orb.classList.add('orb');
+                
+                // Random properties
+                const size = Math.random() * 300 + 100;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100 + 100;
+                const duration = Math.random() * 40 + 20;
+                const delay = Math.random() * 10;
+                
+                orb.style.width = `${size}px`;
+                orb.style.height = `${size}px`;
+                orb.style.background = color;
+                orb.style.left = `${posX}%`;
+                orb.style.top = `${posY}%`;
+                orb.style.animationDuration = `${duration}s`;
+                orb.style.animationDelay = `-${delay}s`;
+                
+                orbsContainer.appendChild(orb);
+            }
+
+            // File input display
+            const fileInput = document.getElementById('profile_picture');
+            const fileLabel = document.querySelector('.file-input-label');
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    fileLabel.innerHTML = `<i class="fas fa-check"></i> ${this.files[0].name}`;
+                } else {
+                    fileLabel.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Choose Profile Picture';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
