@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student Details - NeuralNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --neon-blue: #0ff0fc;
+            --neon-pink: #ff2a6d;
+            --neon-purple: #d300c5;
+            --cyber-yellow: #f9f002;
+            --dark-space: #0d0221;
+            --deep-space: #1b0b3a;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-dark: rgba(15, 12, 41, 0.7);
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        body {
+            background: var(--dark-space);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+    
+        /* Cyber Grid Background */
+        .cyber-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 255, 252, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 252, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            animation: gridMove 80s linear infinite;
+        }
+    
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: -800px 800px; }
+        }
+    
+        /* Cyberpunk Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(13, 2, 33, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 255, 252, 0.2);
+            z-index: 1000;
+            animation: slideDown 0.5s ease-out;
+        }
+    
+        @keyframes slideDown {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: transparent;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+    
+        .logo:hover {
+            text-shadow: 0 0 15px rgba(0, 255, 252, 0.7);
+        }
+    
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+        }
+    
+        .nav-buttons a {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            position: relative;
+            padding: 8px 0;
+            transition: all 0.3s;
+        }
+    
+        .nav-buttons a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-pink);
+            transition: width 0.3s;
+        }
+    
+        .nav-buttons a:hover {
+            color: var(--neon-blue);
+        }
+    
+        .nav-buttons a:hover::after {
+            width: 100%;
+        }
+    
+        /* Main Container */
+        .container {
+            margin-top: 100px;
+            padding: 30px 5%;
+            animation: fadeIn 0.8s ease-out;
+        }
+    
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: transparent;
+            background: linear-gradient(90deg, var(--neon-blue), var(--cyber-yellow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            position: relative;
+            text-align: center;
+        }
+    
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), transparent);
+            animation: underlineGrow 1s ease-out;
+        }
+    
+        @keyframes underlineGrow {
+            from { width: 0; }
+            to { width: 150px; }
+        }
+    
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            color: var(--neon-blue);
+            position: relative;
+        }
+    
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 80px;
+            height: 2px;
+            background: var(--neon-pink);
+        }
+    
+        /* Profile Section */
+        .profile {
+            background: rgba(13, 2, 33, 0.7);
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 252, 0.2);
+            animation: floatUp 0.6s ease-out;
+        }
+    
+        @keyframes floatUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    
+        /* Modified Form Styling - Single Row Layout */
+        form {
+            display: grid;
+            grid-template-columns: 1fr; /* Single column layout */
+            gap: 15px; /* Reduced gap between rows */
+            margin-bottom: 30px;
+        }
+    
+        .form-row {
+            display: grid;
+            grid-template-columns: 150px 1fr; /* Label takes 150px, input takes remaining */
+            align-items: center;
+            gap: 15px;
+        }
+    
+        label {
+            color: var(--neon-blue);
+            font-weight: 600;
+            font-size: 1rem;
+            white-space: nowrap; /* Prevent label wrapping */
+        }
+    
+        input {
+            width: 100%;
+            padding: 10px 15px; /* Slightly reduced padding */
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+    
+        input:focus {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 15px rgba(255, 42, 109, 0.3);
+            outline: none;
+        }
+    
+        input[readonly] {
+            background: rgba(0, 0, 0, 0.2);
+            border-color: var(--neon-purple);
+            color: #aaa;
+        }
+    
+        /* Date Input Customization */
+        input[type="date"] {
+            position: relative;
+        }
+    
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.7;
+            cursor: pointer;
+        }
+    
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0 30px;
+            background: rgba(13, 2, 33, 0.5);
+            border: 1px solid var(--neon-blue);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 255, 252, 0.1);
+        }
+    
+        th {
+            background: rgba(0, 255, 252, 0.1);
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    
+        tr:nth-child(even) {
+            background: rgba(0, 255, 252, 0.03);
+        }
+    
+        tr:hover {
+            background: rgba(0, 255, 252, 0.05);
+        }
+    
+        /* Bar Chart Styling */
+        .bar-chart {
+            width: 100%;
+            max-width: 800px;
+            margin: 30px auto;
+            border: 1px solid var(--neon-blue);
+            border-radius: 8px;
+            padding: 20px;
+            background: rgba(13, 2, 33, 0.5);
+            box-shadow: 0 0 20px rgba(0, 255, 252, 0.1);
+        }
+    
+        .bar-chart img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    
+        /* Button Styling */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+    
+        /* Update button positioning */
+        .btn[type="submit"] {
+            grid-column: 1 / -1;
+            margin-top: 10px;
+            width: auto; /* Let button size naturally */
+            justify-self: start; /* Align left */
+            padding: 12px 30px; /* Wider button */
+        }
+    
+        .btn[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 255, 252, 0.5);
+        }
+    
+        .btn-delete {
+            background: linear-gradient(90deg, var(--neon-pink), #ff0a54);
+            color: white;
+        }
+    
+        .btn-delete:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(255, 42, 109, 0.5);
+        }
+    
+        .btn-back {
+            background: rgba(0, 255, 252, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+        }
+    
+        .btn-back:hover {
+            background: rgba(0, 255, 252, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 252, 0.3);
+        }
+    
+        /* Button Container */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+    
+        /* Floating Cyber Orbs */
+        .cyber-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+    
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.2;
+            animation: floatOrb linear infinite;
+        }
+    
+        @keyframes floatOrb {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translate(100vw, -100vh);
+                opacity: 0;
+            }
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .navbar {
+                padding: 15px 3%;
+            }
+            
+            .container {
+                padding: 30px 3%;
+            }
+        }
+    
+        @media (max-width: 992px) {
+            .nav-buttons {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+        }
+    
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 80px;
+                padding: 20px;
+            }
+            
+            .profile {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h1::after {
+                width: 100px;
+            }
+            
+            form {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-container {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            th, td {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+        }
+    
+        /* Form Field Focus Animation */
+        label:has(+ input:focus) {
+            color: var(--neon-pink);
+            text-shadow: 0 0 8px rgba(255, 42, 109, 0.5);
+        }
+
+        /* Responsive adjustments for single row layout */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr; /* Stack on mobile */
+                gap: 5px;
+            }
+            
+            label {
+                margin-bottom: 0;
+                font-size: 0.9rem;
+            }
+            
+            input {
+                padding: 8px 12px;
+            }
+            
+            .btn[type="submit"] {
+                width: 100%; /* Full width on mobile */
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="cyber-bg"></div>
+    <div class="cyber-orbs" id="cyberOrbs"></div>
+
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="nav-buttons">
+            <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('all_students') }}">All Students</a>
+            <a href="#">All Instructors</a>
+            <a href="{{ url_for('i_register') }}">Add Instructors</a>
+            <a href="{{ url_for('a_profile') }}">Profile</a>
+            <a href="{{ url_for('a_logout') }}">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Student Details</h1>
+        <div class="profile">
+            <form method="POST" action="{{ url_for('student_info', student_id=student[0]) }}">
+                <div class="form-row">
+                    <label for="student_id">Student ID</label>
+                    <input type="text" id="student_id" name="student_id" value="{{ student[0] }}" readonly>
+                </div>
+                
+                <div class="form-row">
+                    <label for="name">Student Name</label>
+                    <input type="text" id="name" name="name" value="{{ student[1] }}" required>
+                </div>
+
+                <div class="form-row">
+                    <label for="phone_no">Phone No</label>
+                    <input type="text" id="phone_no" name="phone_no" value="{{ student[2] }}" required>
+                </div>
+
+                <div class="form-row">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" value="{{ student[3] }}" required>
+                </div>
+
+                <div class="form-row">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" value="{{ student[4] }}" required>
+                </div>
+
+                <div class="form-row">
+                    <label for="current_institute">Current Institute</label>
+                    <input type="text" id="current_institute" name="current_institute" value="{{ student[5] }}" required>
+                </div>
+
+                <div class="form-row">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" value="{{ student[6] }}" required>
+                </div>
+
+                <div class="form-row">
+                    <label for="date_of_birth">Date of Birth</label>
+                    <input type="date" id="date_of_birth" name="date_of_birth" value="{{ student[7] }}" required>
+                </div>
+
+                <div class="form-row">
+                    <label for="blood_group">Blood Group</label>
+                    <input type="text" id="blood_group" name="blood_group" value="{{ student[8] }}" required>
+                </div>          
+                <button type="submit" class="btn">Update Data</button>    
+            </form>
+            
+            
+            <h2>Enrolled Courses Info</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Course Code</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in enrolled_courses %}
+                    <tr>
+                        <td>{{ course[0] }}</td>
+                        <td>{{ course[1] }}</td>
+                        <td>{{ course[2] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="bar-chart">
+                <h2>Student's Performance Analysis</h2>
+                <img src="{{ url_for('static', filename=chart_url) }}" alt="Completion Status Chart" class="bar-chart">
+            </div>
+
+            <form method="POST" action="{{ url_for('delete_student', student_id=student[0]) }}">
+                <button type="submit" class="btn btn-delete">Delete Student</button>
+            </form>
+
+            <a href="{{ url_for('all_students') }}" class="btn btn-back">Go Back</a>
+        </div>
+    </div>    
+
+</body>
+</html>
+
+<script>
+    // Create floating cyber orbs
+    document.addEventListener('DOMContentLoaded', function() {
+        const orbsContainer = document.getElementById('cyberOrbs');
+        const colors = ['#0ff0fc', '#ff2a6d', '#d300c5', '#f9f002'];
+        
+        for (let i = 0; i < 5; i++) {
+            const orb = document.createElement('div');
+            orb.classList.add('orb');
+            
+            // Random properties
+            const size = Math.random() * 300 + 100;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100 + 100;
+            const duration = Math.random() * 40 + 20;
+            const delay = Math.random() * 10;
+            
+            orb.style.width = `${size}px`;
+            orb.style.height = `${size}px`;
+            orb.style.background = color;
+            orb.style.left = `${posX}%`;
+            orb.style.top = `${posY}%`;
+            orb.style.animationDuration = `${duration}s`;
+            orb.style.animationDelay = `-${delay}s`;
+            
+            orbsContainer.appendChild(orb);
+        }
+
+        // Add animation to table rows
+        const tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach((row, index) => {
+            row.style.animation = `fadeIn 0.3s ease-out ${index * 0.05}s forwards`;
+            row.style.opacity = 0;
+        });
+
+        // Add pulse animation to delete button
+        const deleteBtn = document.querySelector('.btn-delete');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('mouseover', function() {
+                this.style.animation = 'pulse 0.5s infinite alternate';
+            });
+            
+            deleteBtn.addEventListener('mouseout', function() {
+                this.style.animation = 'none';
+            });
+        }
+    });
+
+    // Add pulse animation
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.05); }
+    }
+</script>
+
