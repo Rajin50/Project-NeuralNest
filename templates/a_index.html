@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>NeuralNest - Edu-Tech Learning Platform</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS Styles -->
+    <style>
+        :root {
+            --neon-blue: #0ff0fc;
+            --neon-pink: #ff2a6d;
+            --neon-purple: #d300c5;
+            --cyber-yellow: #f9f002;
+            --dark-space: #0d0221;
+            --deep-space: #1b0b3a;
+            --matrix-green: #00ff41;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--dark-space);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Cyberpunk Background with Blur Effect */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('static/uploads/admin_index_bg.jpg') no-repeat center center;
+            background-size: cover;
+            filter: blur(8px) brightness(0.4);
+            z-index: -2;
+            transform: scale(1.1);
+        }
+
+        /* Cyber Grid Overlay */
+        .cyber-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(13, 2, 33, 0.7) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(13, 2, 33, 0.7) 2px, transparent 2px);
+            background-size: 40px 40px;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        /* Glitch Effect Container */
+        .glitch-container {
+            position: relative;
+            width: 100%;
+        }
+
+        /* Cyberpunk Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 5%;
+            z-index: 1000;
+            background: rgba(13, 2, 33, 0.8);
+            border-bottom: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 255, 252, 0.2);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: transparent;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink), var(--neon-purple));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: gradient 3s linear infinite;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            letter-spacing: 2px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            position: relative;
+            padding: 12px 30px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s;
+            z-index: 1;
+        }
+
+        #signinBtn {
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+        }
+
+        #signinBtn:hover {
+            color: var(--dark-space);
+            box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+        }
+
+        #signinBtn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--neon-blue);
+            transition: all 0.4s;
+            z-index: -1;
+        }
+
+        #signinBtn:hover::before {
+            left: 0;
+        }
+
+        #signupBtn {
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+        }
+
+        #signupBtn:hover {
+            color: var(--dark-space);
+            box-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+        }
+
+        #signupBtn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--neon-pink);
+            transition: all 0.4s;
+            z-index: -1;
+        }
+
+        #signupBtn:hover::before {
+            left: 0;
+        }
+
+        /* Cyberpunk Main Content */
+        .quote {
+            max-width: 900px;
+            padding: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .quote h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            color: transparent;
+            background: linear-gradient(90deg, var(--neon-blue), var(--cyber-yellow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            line-height: 1.2;
+            text-shadow: 0 0 10px rgba(0, 255, 252, 0.3);
+            letter-spacing: 2px;
+            animation: textGlow 2s infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 10px rgba(0, 255, 252, 0.3); }
+            100% { text-shadow: 0 0 20px rgba(0, 255, 252, 0.7), 0 0 30px rgba(0, 255, 252, 0.4); }
+        }
+
+        .quote p {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .quote p::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-pink), transparent);
+        }
+
+        /* Cyberpunk Scanline Effect */
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.03) 1px,
+                transparent 1px
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes scanline {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        /* Cyberpunk Corner Accents */
+        .corner-accent {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-style: solid;
+            border-color: var(--neon-blue);
+            pointer-events: none;
+        }
+
+        .top-left {
+            top: 20px;
+            left: 20px;
+            border-width: 3px 0 0 3px;
+        }
+
+        .top-right {
+            top: 20px;
+            right: 20px;
+            border-width: 3px 3px 0 0;
+        }
+
+        .bottom-left {
+            bottom: 20px;
+            left: 20px;
+            border-width: 0 0 3px 3px;
+        }
+
+        .bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-width: 0 3px 3px 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .quote h1 {
+                font-size: 3.5rem;
+            }
+            .quote p {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .quote h1 {
+                font-size: 3rem;
+            }
+            .quote p {
+                font-size: 1.4rem;
+            }
+            .logo {
+                font-size: 2rem;
+            }
+            .nav-btn {
+                padding: 10px 25px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+            .buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            .quote h1 {
+                font-size: 2.5rem;
+            }
+            .quote p {
+                font-size: 1.2rem;
+            }
+            .quote {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .quote h1 {
+                font-size: 2rem;
+            }
+            .quote p {
+                font-size: 1rem;
+            }
+            .nav-btn {
+                padding: 8px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Cyberpunk Glitch Effect (Occasional) */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(-3px, -3px); }
+            60% { transform: translate(3px, 3px); }
+            80% { transform: translate(3px, -3px); }
+            100% { transform: translate(0); }
+        }
+
+        .glitch-effect {
+            animation: glitch 0.5s linear infinite;
+            display: none;
+        }
+
+        /* Activate glitch effect randomly */
+        @keyframes randomGlitch {
+            0%, 99% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .random-glitch {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('static/uploads/admin_index_bg.jpg') no-repeat center center;
+            background-size: cover;
+            opacity: 0;
+            z-index: -1;
+            filter: hue-rotate(90deg) contrast(150%);
+            animation: randomGlitch 10s infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Cyberpunk Background Elements -->
+    <div class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="cyber-grid"></div>
+        <div class="scanlines"></div>
+        <div class="random-glitch"></div>
+        
+        <!-- Corner Accents -->
+        <div class="corner-accent top-left"></div>
+        <div class="corner-accent top-right"></div>
+        <div class="corner-accent bottom-left"></div>
+        <div class="corner-accent bottom-right"></div>
+
+        <!-- Navbar -->
+        <div class="navbar">
+            <div class="logo">NeuralNest</div>
+            <div class="buttons">
+                <a href="{{ url_for('a_login') }}" id="signinBtn" class="nav-btn">Admin Sign In</a>
+                <a href="{{ url_for('a_register') }}" id="signupBtn" class="nav-btn">Admin Sign Up</a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="quote">
+            <h1 class="glitch-container">
+                <span class="glitch-effect">Igniting Innovation through Education</span>
+                Igniting Innovation through Education
+            </h1>
+            <p>The future belongs to those who learn more skills and combine them in creative ways</p>
+        </div>
+    </div>
+
+    <script>
+        // Random glitch effect
+        document.addEventListener('DOMContentLoaded', function() {
+            // Occasionally show glitch effect
+            setInterval(function() {
+                if(Math.random() > 0.9) {
+                    document.querySelector('.glitch-effect').style.display = 'block';
+                    setTimeout(function() {
+                        document.querySelector('.glitch-effect').style.display = 'none';
+                    }, 200);
+                }
+            }, 5000);
+
+            // Neon button hover effects
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                });
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
