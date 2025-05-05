@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student Dashboard - NeuralNest</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Cosmic Color Scheme */
+        :root {
+            --space-dark: #0f0c29;
+            --space-medium: #302b63;
+            --space-light: #24243e;
+            --neon-blue: #00f2fe;
+            --neon-purple: #8f00ff;
+            --gradient: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --text-light: #f8f9fa;
+            --text-dim: rgba(255, 255, 255, 0.7);
+        }
+    
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+    
+        body {
+            background: linear-gradient(to right, var(--space-dark), var(--space-medium), var(--space-light));
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+    
+        /* Stellar Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            animation: stellarFadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+    
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(143, 0, 255, 0.3);
+            transition: transform 0.4s ease;
+        }
+    
+        .logo:hover {
+            transform: scale(1.05);
+        }
+    
+        .nav-buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+    
+        .nav-buttons a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .nav-buttons a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+    
+        .nav-buttons a:hover {
+            color: var(--text-light);
+        }
+    
+        .nav-buttons a:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+    
+        /* Main Content */
+        .courses {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 8rem 5% 3rem;
+        }
+    
+        .courses h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(to right, #fff, var(--neon-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            animation: textGlow 2s infinite alternate;
+        }
+    
+        /* Search Constellation */
+        .search-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+    
+        .search-box {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .search-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(143, 0, 255, 0.1),
+                rgba(0, 242, 254, 0.1),
+                transparent
+            );
+            transform: rotate(30deg);
+            transition: all 0.6s ease;
+        }
+    
+        .search-box:hover::before {
+            transform: rotate(30deg) translate(20%, 20%);
+        }
+    
+        .search-box label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--neon-blue);
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+    
+        .search-box input,
+        .search-box select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(15, 12, 41, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+    
+        .search-box input:focus,
+        .search-box select:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 0 2px rgba(0, 242, 254, 0.2);
+        }
+    
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+    
+        .search-box select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            cursor: pointer;
+        } 
+    
+        /* Suggestions Nebula */
+        .suggestions {
+            position: absolute;
+            width: calc(100% - 3rem);
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(15, 12, 41, 0.95);
+            border: 1px solid var(--glass-border);
+            border-radius: 0 0 8px 8px;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+    
+        .suggestions div {
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    
+        .suggestions div:hover {
+            background: rgba(143, 0, 255, 0.1);
+            color: var(--neon-blue);
+        }
+    
+        /* Course Galaxy */
+        .courses-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+    
+        /* Course Planets */
+        .course-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 3px solid var(--glass-border);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: stellarFadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+    
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                circle at 75% 30%,
+                rgba(143, 0, 255, 0.1),
+                transparent 50%
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+    
+        .course-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+    
+        .course-card:hover::before {
+            opacity: 1;
+        }
+    
+        .course-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--glass-border);
+            transition: transform 0.5s ease;
+        }
+    
+        .course-card:hover img {
+            transform: scale(1.05);
+        }
+    
+        .course-card-content {
+            padding: 1.5rem;
+        }
+    
+        .course-card h3 {
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+            position: relative;
+            display: inline-block;
+        }
+    
+        .course-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.4s ease;
+        }
+    
+        .course-card:hover h3::after {
+            width: 80px;
+        }
+    
+        .course-card p {
+            color: var(--text-dim);
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+    
+        .course-card p:first-of-type {
+            color: var(--neon-blue);
+            font-weight: 500;
+            text-align: center;
+        }
+    
+        .course-card button {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            margin-bottom: 2px;
+        }
+    
+        .course-card button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+            z-index: -1;
+            margin-bottom: 2px;
+        }
+    
+        .course-card button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(143, 0, 255, 0.4);
+            margin-bottom: 2px;
+        }
+    
+        .course-card button:hover::before {
+            left: 100%;
+        }
+    
+        /* No Courses Supernova */
+        .courses-container > p {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--glass-border);
+            border-radius: 15px;
+            color: var(--neon-blue);
+            animation: pulse 2s infinite;
+        }
+    
+        /* Cosmic Animations */
+        @keyframes stellarFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @keyframes textGlow {
+            0% {
+                text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+            }
+            100% {
+                text-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+            }
+        }
+    
+        @keyframes pulse {
+            0% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.6;
+            }
+        }
+    
+        /* Responsive Wormholes */
+        @media (max-width: 1200px) {
+            .search-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+    
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+    
+            .courses {
+                padding-top: 10rem;
+            }
+    
+            .courses h2 {
+                font-size: 2rem;
+            }
+        }
+    
+        @media (max-width: 576px) {
+            .courses h2 {
+                font-size: 1.8rem;
+            }
+    
+            .course-card {
+                animation: none;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="nav-buttons">
+            <a href="{{ url_for('instructor_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('get_courses') }}">Browse Courses</a>
+            <a href="{{ url_for('i_profile') }}">Profile</a>
+            <a href="{{ url_for('add_new_course') }}">Add Courses</a>
+            <a href="{{ url_for('i_logout') }}">Log Out</a>
+        </div>
+    </div>
+
+    <div class="courses">
+        <h2>All Courses</h2>
+    
+        <!-- Search Boxes -->
+        <div class="search-container">
+            <div class="search-box">
+                <label for="search-course">Search Course by Name:</label>
+                <input id="search-course" type="text" placeholder="Type course name..." oninput="searchByName(this.value)">
+                <div id="suggestions" class="suggestions"></div>
+            </div>
+    
+            <div class="search-box">
+                <label for="filter-category">Filter by Category:</label>
+                <select id="filter-category" onchange="searchByCategory(this.value)">
+                    <option value="" disabled selected>Choose Category</option>
+                    <option value="Cyber Security">Cyber Security</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Python">Python</option>
+                </select>
+            </div>
+        </div>
+    
+        <!-- Courses Display -->
+        <div id="courses-container" class="courses-container">
+            <!-- Cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+        }
+    </script>
+
+    <script>
+        // Fetch and render all courses initially
+       window.onload = () => {
+           fetchCourses();
+       };
+
+       function fetchCourses(query = null, filter = null) {
+           fetch('/get_courses', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ query, filter }),
+           })
+               .then(response => response.json())
+               .then(data => renderCourses(data))
+               .catch(error => console.error('Error fetching courses:', error));
+       }
+
+       function renderCourses(response) {
+           const courses = response.data; // Correctly access the courses data
+           const container = document.getElementById('courses-container');
+           container.innerHTML = '';
+       
+           if (!courses || courses.length === 0) {
+               container.innerHTML = '<p>No courses found.</p>';
+               return;
+           }
+       
+           courses.forEach(course => {
+               const card = `
+                   <div class="course-card">
+                       <img src="${course.course_picture}" alt="${course.course_name}">
+                       <h3>${course.course_name}</h3>
+                       <p>Instructor: ${course.instructor_name}</p>
+                       <p>${course.description}</p>
+                       <button onclick="viewCourse('${course.course_code}')">View Course</button>
+                   </div>
+               `;
+               container.innerHTML += card;
+           });
+       }
+       
+       function searchByName(input) {
+           document.getElementById('filter-category').selectedIndex = 0; // Reset category dropdown
+           if (input) fetchCourses(input, null);
+       }
+       
+       function searchByCategory(category) {
+           document.getElementById('search-course').value = ''; // Clear the search input box
+           if (category) fetchCourses(null, category);
+       }        
+
+       function viewCourse(courseCode) {
+           // Use Fetch API to call the Flask endpoint
+           fetch(`/view_course/${courseCode}`)
+               .then(response => {
+                   if (!response.ok) {
+                       throw new Error(`Error: ${response.status}`);
+                   }
+                   return response.text(); 
+               })
+               .then(htmlContent => {
+                   const newWindow = window.open();
+                   newWindow.document.write(htmlContent);
+               })
+               .catch(error => {
+                   console.error("Error fetching course details:", error);
+               });
+       }
+   </script>
+
+    <script>
+        // Enhanced search with debounce
+        let searchTimeout;
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-course');
+            const suggestionsBox = document.getElementById('suggestions');
+            
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                
+                if (query.length > 1) {
+                    searchTimeout = setTimeout(() => {
+                        fetch('/get_courses', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ query: query, filter: null }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.data && data.data.length > 0) {
+                                showSuggestions(data.data);
+                            } else {
+                                suggestionsBox.style.display = 'none';
+                            }
+                        });
+                    }, 300);
+                } else {
+                    suggestionsBox.style.display = 'none';
+                }
+            });
+    
+            function showSuggestions(courses) {
+                suggestionsBox.innerHTML = '';
+                courses.slice(0, 5).forEach(course => {
+                    const suggestion = document.createElement('div');
+                    suggestion.textContent = course.course_name;
+                    suggestion.addEventListener('click', function() {
+                        searchInput.value = course.course_name;
+                        suggestionsBox.style.display = 'none';
+                        fetchCourses(course.course_name, null);
+                    });
+                    suggestionsBox.appendChild(suggestion);
+                });
+                suggestionsBox.style.display = 'block';
+            }
+    
+            // Add hover effect for course cards
+            const courseCards = document.querySelectorAll('.course-card');
+            courseCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                    this.style.boxShadow = '0 15px 40px rgba(0, 0, 0, 0.3)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                    this.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.2)';
+                });
+            });
+        });
+    
+        // Enhanced viewCourse with loading animation
+        function viewCourse(courseCode) {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            
+            // Add loading state
+            button.innerHTML = '<span class="loading-dots">Loading</span>';
+            button.disabled = true;
+            
+            // Add pulse animation to card
+            const card = button.closest('.course-card');
+            card.style.animation = 'pulse 1s infinite';
+            
+            fetch(`/view_course/${courseCode}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.text();
+                })
+                .then(htmlContent => {
+                    const newWindow = window.open();
+                    newWindow.document.write(htmlContent);
+                })
+                .catch(error => {
+                    console.error("Error fetching course details:", error);
+                    alert("Failed to load course. Please try again.");
+                })
+                .finally(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    card.style.animation = '';
+                });
+        }
+    
+        // Add loading dots animation
+        const style = document.createElement('style');
+        style.textContent = `
+            .loading-dots::after {
+                content: '.';
+                animation: dots 1.5s steps(5, end) infinite;
+            }
+            @keyframes dots {
+                0%, 20% { content: '.'; }
+                40% { content: '..'; }
+                60% { content: '...'; }
+                80%, 100% { content: ''; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+</body>
+</html>

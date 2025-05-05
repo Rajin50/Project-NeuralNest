@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student Dashboard - NeuralNest</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776E6;
+            --text-light: #f8f9fa;
+            --text-dark: #212529;
+            --gradient: linear-gradient(135deg, #6e48aa 0%, #9d50bb 50%, #4776E6 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --success: #4CAF50;
+            --warning: #FFC107;
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+    
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+    
+        /* Navbar - Glass Morphism */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            animation: fadeInDown 0.8s ease-out;
+        }
+    
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+    
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(110, 72, 170, 0.5);
+        }
+    
+        .nav-buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+    
+        .nav-buttons a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+    
+        .nav-buttons a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+    
+        .nav-buttons a:hover {
+            color: var(--accent);
+        }
+    
+        .nav-buttons a:hover::after {
+            width: 70%;
+        }
+    
+        /* Dashboard Container */
+        .dashboard-container {
+            padding: 8rem 5% 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+    
+        /* Dashboard Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+    
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #fff, #c9d6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    
+        .dashboard-header button {
+            padding: 0.8rem 1.8rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .dashboard-header button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+    
+        .dashboard-header button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(110, 72, 170, 0.6);
+        }
+    
+        .dashboard-header button:hover::before {
+            left: 100%;
+        }
+    
+        /* Courses Container */
+        .courses-container {
+            margin-bottom: 3rem;
+        }
+    
+        .courses-container h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+            position: relative;
+            display: inline-block;
+        }
+    
+        .courses-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+    
+        /* Courses Grid */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+    
+        /* Course Card */
+        .course-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: var(--card-shadow);
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: backwards;
+        }
+    
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+    
+        .course-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--glass-border);
+        }
+    
+        .course-card h3 {
+            padding: 1rem 1.5rem 0;
+            color: var(--text-light);
+            font-size: 1.3rem;
+        }
+    
+        .course-card p {
+            padding: 0.8rem 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+    
+        .view-btn {
+            display: block;
+            padding: 0.8rem;
+            margin: 0 1.5rem 1.5rem;
+            background: var(--gradient);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+    
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(110, 72, 170, 0.4);
+        }
+    
+        /* No Courses Card */
+        .no-course-card {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--glass-border);
+        }
+    
+        .no-course-card h4 {
+            color: var(--warning);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+    
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+        }
+    
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+    
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+    
+            .dashboard-container {
+                padding-top: 10rem;
+            }
+    
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+    
+            .courses-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+    
+        @media (max-width: 576px) {
+            .dashboard-header h1 {
+                font-size: 1.8rem;
+            }
+    
+            .courses-container h2 {
+                font-size: 1.5rem;
+            }
+    
+            .course-card {
+                animation: none;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="nav-buttons">
+            <a href="{{ url_for('instructor_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('get_courses') }}">Browse Courses</a>
+            <a href="{{ url_for('i_profile') }}">Profile</a>
+            <a href="{{ url_for('add_new_course') }}">Add Courses</a>
+            <a href="{{ url_for('i_logout') }}">Log Out</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Welcome, {{ instructor_name }}!</h1>
+            <button onclick="window.location.href='{{ url_for('add_new_course') }}'">Add New Course</button>
+        </div>
+
+
+        <div class="courses-container">
+            <h2>Your Created Courses</h2>
+            {% if no_courses %}
+            <!-- Card for No Courses -->
+            <div class="course-card no-course-card">
+                <h4>You've not assigned in any courses!<br> You need to create new course.</h4>
+            </div>
+
+            {% else %}
+            <div class="courses-grid">
+                {% for course in courses %}
+                <div class="course-card">
+                    <img src="{{ course[2] }}" alt="Course Image">
+                    <h3>{{ course[1] }}</h3>
+                    <p>In order to extract knowledge and insights from both organized and unstructured data, data science is an interdisciplinary profession that combines domain knowledge, programming abilities, and statistical competence.</p>
+                    <a href="{{ url_for('view_course', course_code=course[0]) }}" class="view-btn">View Course</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Add staggered animations for course cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const courseCards = document.querySelectorAll('.course-card');
+            
+            courseCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+    
+            // Add hover effect for course cards
+            courseCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                    this.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.3)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                    this.style.boxShadow = 'var(--card-shadow)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Login - NeuralNest</title>
+    
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776E6;
+            --text-light: #f8f9fa;
+            --text-dark: #212529;
+            --gradient: linear-gradient(135deg, #6e48aa 0%, #9d50bb 50%, #4776E6 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --success: #4CAF50;
+            --error: #f44336;
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+    
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+    
+        /* Floating Particles Animation */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+    
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            opacity: 0.3;
+        }
+    
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+    
+        /* Navbar - Glass Morphism */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            animation: fadeInDown 0.8s ease-out;
+        }
+    
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+    
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(110, 72, 170, 0.5);
+        }
+    
+        .nav-link {
+            padding: 0.8rem 1.5rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+    
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+    
+        .nav-link:hover {
+            color: var(--accent);
+        }
+    
+        .nav-link:hover::before {
+            width: 70%;
+        }
+    
+        /* Login Container */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            padding-top: 8rem;
+        }
+    
+        .login-box {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s 0.3s forwards;
+        }
+    
+        .login-box h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+            font-size: 1.8rem;
+            background: linear-gradient(to right, #fff, #c9d6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    
+        /* Form Styles */
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+    
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+    
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+    
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(71, 118, 230, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+    
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+    
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(110, 72, 170, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+    
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(110, 72, 170, 0.6);
+        }
+    
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+    
+        .btn-submit:active {
+            transform: translateY(-1px);
+        }
+    
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 5%;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .nav-link {
+                padding: 0.6rem 1.2rem;
+            }
+            
+            .login-box {
+                padding: 2rem;
+            }
+            
+            .login-box h2 {
+                font-size: 1.5rem;
+            }
+        }
+    
+        @media (max-width: 576px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .login-box {
+                padding: 1.5rem;
+            }
+            
+            .login-box h2 {
+                font-size: 1.3rem;
+            }
+            
+            .input-field, .btn-submit {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/" class="logo">NeuralNest</a>
+        </div>
+        <div class="navbar-right">
+            <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+        </div>
+    </nav>
+
+    <!-- Login Form Section -->
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Instructor Sign in to NeuralNest</h2>
+            <form method="POST" action="{{ url_for('i_login') }}">
+                {{ form.hidden_tag() }}
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    {{ form.email(class="input-field", placeholder="Enter your email") }}
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    {{ form.password(class="input-field", placeholder="Enter your password") }}
+                </div>
+                <div class="input-group">
+                    <button type="submit" class="btn-submit">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Create floating particles
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'particles';
+            document.body.appendChild(particlesContainer);
+            
+            // Generate particles
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random properties
+                const size = Math.random() * 10 + 5;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 10;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+    
+            // Add focus effects to form fields
+            const inputs = document.querySelectorAll('.input-field');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.querySelector('label').style.color = 'var(--accent)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.querySelector('label').style.color = 'var(--text-light)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

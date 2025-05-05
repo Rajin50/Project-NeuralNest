@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Assignments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776E6;
+            --text-light: #f8f9fa;
+            --text-dark: #212529;
+            --gradient: linear-gradient(135deg, #6e48aa 0%, #9d50bb 50%, #4776E6 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --error: #f44336;
+            --late: #FF5722;
+            --on-time: #4CAF50;
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+    
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+    
+        /* Navbar - Glass Morphism */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            animation: fadeInDown 0.8s ease-out;
+        }
+    
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+    
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(110, 72, 170, 0.5);
+        }
+    
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+    
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+    
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+    
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+    
+        .nav-links a:hover::after {
+            width: 70%;
+        }
+    
+        /* Main Container */
+        .container {
+            padding: 8rem 5% 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.6s ease-out;
+        }
+    
+        /* Header */
+        .container h1 {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, #fff, #c9d6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+    
+        .container h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+    
+        .container h2 {
+            font-size: 1.8rem;
+            margin: 3rem 0 1.5rem;
+            color: var(--text-light);
+            position: relative;
+            display: inline-block;
+        }
+    
+        .container h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+    
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 3rem;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.6s ease-out;
+        }
+    
+        thead {
+            background: rgba(110, 72, 170, 0.3);
+        }
+    
+        th {
+            padding: 1.2rem 1rem;
+            text-align: left;
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+    
+        tbody tr {
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+    
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+    
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+    
+        td {
+            padding: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+    
+        /* Links in tables */
+        table a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    
+        table a::before {
+            content: '↗';
+            font-size: 1.1rem;
+        }
+    
+        table a:hover {
+            color: #8ab4f8;
+            text-decoration: underline;
+        }
+    
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    
+        .status-on-time {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: var(--on-time);
+        }
+    
+        .status-late {
+            background-color: rgba(255, 87, 34, 0.2);
+            color: var(--late);
+        }
+    
+        /* Marks Form */
+        td form {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    
+        td input[type="number"] {
+            width: 70px;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--text-light);
+            text-align: center;
+        }
+    
+        td input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+    
+        td button[type="submit"] {
+            padding: 0.5rem 1rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        td button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(110, 72, 170, 0.4);
+        }
+    
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--glass-border);
+            border-radius: 15px;
+            margin-bottom: 3rem;
+        }
+    
+        .empty-state p {
+            color: var(--warning);
+            font-size: 1.1rem;
+        }
+    
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    
+        @media (max-width: 992px) {
+            .container {
+                padding-top: 10rem;
+            }
+        }
+    
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+    
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+    
+            .container h1 {
+                font-size: 1.8rem;
+            }
+    
+            .container h2 {
+                font-size: 1.5rem;
+            }
+    
+            th, td {
+                padding: 0.8rem;
+            }
+        }
+    
+        @media (max-width: 576px) {
+            .container h1 {
+                font-size: 1.6rem;
+            }
+    
+            td form {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+    
+            td input[type="number"] {
+                width: 100%;
+            }
+    
+            td button[type="submit"] {
+                width: 100%;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="nav-links">
+            <a href="{{ url_for('instructor_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('get_courses') }}">Browse Courses</a>
+            <a href="{{ url_for('i_profile') }}">Profile</a>
+            <a href="{{ url_for('add_new_course') }}">Add Courses</a>
+            <a href="{{ url_for('i_logout') }}">Log Out</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Course Name: {{ course_name }}</h1> <br>
+
+        <!-- All Assignments Table -->
+        <h2>All Assignments</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Module No</th>
+                    <th>Assignment File</th>
+                    <th>Deadline</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in all_assignments %}
+                <tr>
+                    <td>{{ assignment[0] }}</td>
+                    <td>{{ assignment[1] }}</td>
+                    <td><a href="{{ url_for('static', filename='uploads/' + assignment[2]) }}" target="_blank">View Assignment</a></td>
+                    <td>{{ assignment[3] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Submitted Assignments Table -->
+        <h2>Submitted Assignments</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Serial No</th>
+                    <th>Student Name</th>
+                    <th>Course Name</th>
+                    <th>Module No</th>
+                    <th>Submitted Assignment</th>
+                    <th>Submission Date</th>
+                    <th>Submission Status</th>
+                    <th>Marks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for submission in submitted_assignments %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ submission.student_name }}</td>
+                    <td>{{ submission.course_name }}</td>
+                    <td>{{ submission.module_no }}</td>
+                    <td><a href="{{ url_for('static', filename='uploads/' + submission.submitted_assignments) }}" target="_blank">View Assignment</a></td>
+                    <td>{{ submission.submission_date }}</td>
+                    <td>{{ submission.submission_status }}</td>
+                    <td>
+                        
+                        <form method="post" action="{{ url_for('submit_marks', student_id=submission.student_id, course_code=submission.course_code, module_no=submission.module_no) }}">
+                            <input type="number" name="marks" value="{{ submission.marks }}" min="0" max="100" required>
+                            <button type="submit">In</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

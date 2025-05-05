@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Instructor Profile - NeuralNest</title>
+
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776E6;
+            --text-light: #f8f9fa;
+            --text-dark: #212529;
+            --gradient: linear-gradient(135deg, #6e48aa 0%, #9d50bb 50%, #4776E6 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --success: #4CAF50;
+            --warning: #FFC107;
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+    
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+    
+        /* Navbar - Glass Morphism */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            animation: fadeInDown 0.8s ease-out;
+        }
+    
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+    
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(110, 72, 170, 0.5);
+        }
+    
+        .nav-buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+    
+        .nav-buttons a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+    
+        .nav-buttons a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+    
+        .nav-buttons a:hover {
+            color: var(--accent);
+        }
+    
+        .nav-buttons a:hover::after {
+            width: 70%;
+        }
+    
+        /* Profile Container */
+        .profile-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 8rem 5% 3rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+    
+        .profile-container h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, #fff, #c9d6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+    
+        .profile-container h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+    
+        /* Profile Form */
+        form {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+        }
+    
+        .profile-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+    
+        .profile-img {
+            grid-column: 1 / -1;
+            justify-self: center;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 20px rgba(71, 118, 230, 0.3);
+            transition: all 0.4s ease;
+        }
+    
+        .profile-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(71, 118, 230, 0.5);
+        }
+    
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+    
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+    
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+    
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(71, 118, 230, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+    
+        .form-group input:disabled {
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.5);
+        }
+    
+        /* File Input Customization */
+        .form-group input[type="file"] {
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+    
+        .form-group input[type="file"]::file-selector-button {
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        .form-group input[type="file"]::file-selector-button:hover {
+            background: var(--secondary);
+        }
+    
+        /* Submit Button */
+        button[type="submit"] {
+            grid-column: 1 / -1;
+            justify-self: center;
+            padding: 0.8rem 2.5rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+    
+        button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+    
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(110, 72, 170, 0.6);
+        }
+    
+        button[type="submit"]:hover::before {
+            left: 100%;
+        }
+    
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .profile-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+    
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+    
+            .profile-container {
+                padding-top: 10rem;
+            }
+    
+            .profile-container h1 {
+                font-size: 2rem;
+            }
+        }
+    
+        @media (max-width: 576px) {
+            form {
+                padding: 1.5rem;
+            }
+    
+            .profile-container h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="nav-buttons">
+            <a href="{{ url_for('instructor_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('get_courses') }}">Browse Courses</a>
+            <a href="{{ url_for('i_profile') }}">Profile</a>
+            <a href="{{ url_for('add_new_course') }}">Add Courses</a>
+            <a href="{{ url_for('i_logout') }}">Log Out</a>
+        </div>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="profile-container">
+    <h1>Instructor Profile</h1>
+    
+    <form method="POST" enctype="multipart/form-data">
+        <div class="profile-info">
+            <img src="{{ instructor[9] }}" alt="Profile Picture" class="profile-img">
+            <div class="form-group">
+                <label for="instructor_id">Instructor ID</label>
+                <input type="text" id="instructor_id" value="{{ instructor[1] }}" disabled>
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" value="{{ instructor[0] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="phone_no">Phone No</label>
+                <input type="text" id="phone_no" value="{{ instructor[2] }}" disabled>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" value="{{ instructor[3] }}" disabled>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" value="{{ instructor[4] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="course_name">Course Name</label>
+                <input type="text" id="course_name" name="course_name" value="{{ instructor[5] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" value="{{ instructor[6] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="date_of_birth">Date of Birth</label>
+                <input type="date" id="date_of_birth" name="date_of_birth" value="{{ instructor[7] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="blood_group">Blood Group</label>
+                <input type="text" id="blood_group" name="blood_group" value="{{ instructor[8] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="profile_picture">Profile Picture</label>
+                <input type="file" id="profile_picture" name="profile_picture">
+            </div>
+            <button type="submit">Update</button>
+        </div>
+    </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add focus effects to form fields
+            const inputs = document.querySelectorAll('.form-group input:not([disabled])');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.querySelector('label').style.color = 'var(--accent)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.querySelector('label').style.color = 'var(--text-light)';
+                });
+            });
+    
+            // Preview profile picture when selected
+            const profileImg = document.querySelector('.profile-img');
+            const fileInput = document.querySelector('input[type="file"]');
+            
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    if (e.target.files && e.target.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            profileImg.src = event.target.result;
+                            profileImg.classList.add('pulse-animation');
+                            setTimeout(() => {
+                                profileImg.classList.remove('pulse-animation');
+                            }, 500);
+                        };
+                        reader.readAsDataURL(e.target.files[0]);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

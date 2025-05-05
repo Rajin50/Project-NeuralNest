@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>NeuralNest - Edu-Tech Learning Platform</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- CSS Styles -->
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776E6;
+            --text-light: #f8f9fa;
+            --text-dark: #212529;
+            --gradient: linear-gradient(135deg, #6e48aa 0%, #9d50bb 50%, #4776E6 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+    
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+    
+        /* Floating Particles Animation */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+    
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            opacity: 0.3;
+        }
+    
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+    
+        /* Navbar - Glass Morphism */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            animation: fadeInDown 0.8s ease-out;
+        }
+    
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+    
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(110, 72, 170, 0.5);
+        }
+    
+        .buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+    
+        #signinBtn {
+            padding: 0.8rem 1.8rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(110, 72, 170, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+    
+        #signinBtn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+    
+        #signinBtn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(110, 72, 170, 0.6);
+        }
+    
+        #signinBtn:hover::before {
+            left: 100%;
+        }
+    
+        /* Hero Section - Parallax Effect */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            z-index: -2;
+            opacity: 0.3;
+        }
+    
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(15, 32, 39, 0.9) 0%, rgba(32, 58, 67, 0.85) 50%, rgba(44, 83, 100, 0.8) 100%);
+            z-index: -1;
+        }
+    
+        .quote {
+            max-width: 800px;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 1s 0.5s forwards;
+        }
+    
+        .quote h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(to right, #fff, #c9d6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        .quote p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+    
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .quote h1 {
+                font-size: 3rem;
+            }
+            .quote p {
+                font-size: 1.3rem;
+            }
+        }
+    
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 5%;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            #signinBtn {
+                padding: 0.6rem 1.5rem;
+            }
+            
+            .quote h1 {
+                font-size: 2.5rem;
+            }
+            
+            .quote p {
+                font-size: 1.1rem;
+            }
+        }
+    
+        @media (max-width: 576px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .quote h1 {
+                font-size: 2rem;
+            }
+            
+            .quote p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+    
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="buttons">
+            <a href="{{ url_for('i_login') }}" id="signinBtn">Instructor Sign In</a>
+        </div>
+    </div>
+
+    <!-- Hero Section (Background Image and Quote) -->
+    <div class="hero-section">
+        <div class="quote">
+            <h1>Igniting Innovation through Education</h1>
+            <p>The future belongs to those who learn more skills and combine them in creative ways</p>
+        </div>
+    </div>
+    <script>
+        // Create floating particles
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'particles';
+            document.body.appendChild(particlesContainer);
+            
+            // Generate particles
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random properties
+                const size = Math.random() * 10 + 5;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 10;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        });
+    </script>
+</body>
+</html>

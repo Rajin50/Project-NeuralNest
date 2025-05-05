@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details - NeuralNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776E6;
+            --text-light: #f8f9fa;
+            --text-dark: #212529;
+            --gradient: linear-gradient(135deg, #6e48aa 0%, #9d50bb 50%, #4776E6 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --info: #00bcd4;
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+    
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+    
+        /* Navbar - Glass Morphism */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            animation: fadeInDown 0.8s ease-out;
+        }
+    
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+    
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(110, 72, 170, 0.5);
+        }
+    
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+    
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+    
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+    
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+    
+        .nav-links a:hover::after {
+            width: 70%;
+        }
+    
+        /* Main Container */
+        .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            padding: 8rem 5% 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+    
+        /* Course Details Section */
+        .course-details {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            animation: fadeInLeft 0.8s ease-out;
+        }
+    
+        .course-details h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+    
+        .course-details h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+    
+        .view-assignments-btn {
+            padding: 0.8rem 1.8rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .view-assignments-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+    
+        .view-assignments-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(110, 72, 170, 0.6);
+        }
+    
+        .view-assignments-btn:hover::before {
+            left: 100%;
+        }
+    
+        /* Outline Section */
+        .outline {
+            margin-bottom: 2rem;
+        }
+    
+        .outline h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+    
+        .outline a {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background: var(--info);
+            color: var(--text-dark);
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+    
+        .outline a:hover {
+            background: #0097a7;
+            transform: translateY(-2px);
+        }
+    
+        /* Module Styles */
+        .module {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.6s ease-out;
+        }
+    
+        .module:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+    
+        .module h2 {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+    
+        .module h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--gradient);
+        }
+    
+        .module p {
+            margin: 0.8rem 0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    
+        .module a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+    
+        .module a:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+    
+        .module iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+    
+        /* Sidebar Styles */
+        .sidebar {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            animation: fadeInRight 0.8s ease-out;
+        }
+    
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            position: relative;
+        }
+    
+        .sidebar h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+    
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+    
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    
+        .card h3 {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+    
+        .card p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+    
+        /* Feedback Section */
+        .feedback-section {
+            margin-top: 2rem;
+        }
+    
+        .feedback-box {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) rgba(255, 255, 255, 0.1);
+        }
+    
+        .feedback-box::-webkit-scrollbar {
+            width: 6px;
+        }
+    
+        .feedback-box::-webkit-scrollbar-thumb {
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+    
+        .feedback-item {
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+    
+        .feedback-item p:first-child {
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+        }
+    
+        .feedback-item p:last-child {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+    
+        /* Form Styles */
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-light);
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+    
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(71, 118, 230, 0.3);
+        }
+    
+        button[type="submit"] {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(110, 72, 170, 0.4);
+        }
+    
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: -1;
+                margin-bottom: 2rem;
+            }
+        }
+    
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .container {
+                padding-top: 10rem;
+            }
+            
+            .module iframe {
+                height: 250px;
+            }
+        }
+    
+        @media (max-width: 576px) {
+            .course-details h1 {
+                font-size: 1.5rem;
+            }
+            
+            .module iframe {
+                height: 200px;
+            }
+            
+            .sidebar {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">NeuralNest</div>
+        <div class="nav-links">
+            <a href="{{ url_for('instructor_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('get_courses') }}">Browse Courses</a>
+            <a href="{{ url_for('i_profile') }}">Profile</a>
+            <a href="{{ url_for('add_new_course') }}">Add Courses</a>
+            <a href="{{ url_for('i_logout') }}">Log Out</a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Left Section: Course Details -->
+        <div class="course-details">
+            <h1>Course Name: {{ course_name }}</h1>
+            <button class="view-assignments-btn" onclick="window.location.href='/view_assignments/{{ course_code }}'">
+                View Assignments
+            </button>
+            <div class="outline">
+                <h2>Course Outline</h2>
+                {% if content and content[0][1] %}
+                <!-- Link to Course Outline (PDF) -->
+                <a href="{{ url_for('static', filename='uploads/' + content[0][1]) }}" target="_blank">View Course Outline</a>
+                {% else %}
+                <p>No course outline available.</p>
+                {% endif %}
+            </div>
+        
+            {% if content %}
+            {% for module in content %}
+            <div class="module">
+                <h2>Module {{ module[0] }}</h2>
+                
+                <!-- View PDF File -->
+                <p>View Content File: 
+                    <a href="{{ url_for('static', filename='uploads/' + module[2]) }}" target="_blank">Open PDF</a>
+                </p>
+                
+                
+                <!-- View Module Video -->
+                <p>Module Video: 
+                    <iframe src="{{ module[3]|replace('watch?v=', 'embed/') }}" allowfullscreen></iframe>
+                </p>
+
+                <!-- View Assignment -->
+                <p>View Assignment: 
+                    <a href="{{ url_for('static', filename='uploads/' + module[4]) }}" target="_blank">Open Assignment</a>
+                </p>
+
+                <!-- Assignment Deadline -->
+                <p>Deadline: {{ module[5] }}</p>
+                
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>Currently the course has no modules!</p>
+            {% endif %}
+        </div>
+
+        <!-- Right Section: Course Info -->
+        <div class="sidebar">
+            <h2>Course Info</h2>
+            <div class="card">
+                <h3>Category</h3>
+                <p>{{ course_category }}</p>
+            </div>
+            <div class="card">
+                <h3>Number of Students</h3>
+                <p>{{ num_of_students }}</p>
+            </div>
+            <div class="card">
+                <h3>Completion Rate</h3>
+                <p>{{ completion_rate }}%</p>
+            </div>
+
+            <!-- Student Feedback Section -->
+            <div class="feedback-section">
+                <h2>Student Feedback</h2>
+                <div class="feedback-box">
+                    {% if feedbacks %}
+                        {% for feedback in feedbacks %}
+                            <div class="feedback-item">
+                                <p><strong>{{ feedback[0] }}</strong>:</p>
+                                <p>{{ feedback[1] }}</p>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No feedbacks yet. Be the first to leave feedback!</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Instructor Feedback Section -->
+            <div class="feedback-section">
+                <h2>Instructor Feedback</h2>
+                <div class="feedback-box">
+                    {% if feedbacks %}
+                        {% for feedback in ifeedbacks %}
+                            <div class="feedback-item">
+                                <p><strong>{{ feedback[0] }}</strong>:</p>
+                                <p>{{ feedback[1] }}</p>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No feedbacks yet. Be the first to leave feedback!</p>
+                    {% endif %}
+                </div>
+                <form action="{{ url_for('submit_feedback', course_code=course_code) }}" method="POST">
+                    <textarea name="feedback" placeholder="Write your feedback here..." required></textarea>
+                    <button type="submit">Submit Feedback</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add staggered animations for modules
+        document.addEventListener('DOMContentLoaded', function() {
+            const modules = document.querySelectorAll('.module');
+            
+            modules.forEach((module, index) => {
+                module.style.animationDelay = `${index * 0.1}s`;
+            });
+    
+            // Add hover effect for cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                    this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
