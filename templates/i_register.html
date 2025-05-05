@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    <style>
+        :root {
+            --neon-blue: #0ff0fc;
+            --neon-pink: #ff2a6d;
+            --neon-purple: #d300c5;
+            --cyber-yellow: #f9f002;
+            --dark-space: #0d0221;
+            --deep-space: #1b0b3a;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-dark: rgba(15, 12, 41, 0.7);
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        body {
+            background: var(--dark-space);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+    
+        /* Cyber Grid Background */
+        .cyber-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 255, 252, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 252, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            animation: gridMove 80s linear infinite;
+        }
+    
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: -800px 800px; }
+        }
+    
+        /* Cyberpunk Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(13, 2, 33, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 255, 252, 0.2);
+            z-index: 1000;
+            animation: slideDown 0.5s ease-out;
+        }
+    
+        @keyframes slideDown {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: transparent;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+    
+        .logo:hover {
+            text-shadow: 0 0 15px rgba(0, 255, 252, 0.7);
+        }
+    
+        .navbar-right {
+            display: flex;
+            gap: 20px;
+        }
+    
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            position: relative;
+            padding: 8px 0;
+            transition: all 0.3s;
+        }
+    
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-pink);
+            transition: width 0.3s;
+        }
+    
+        .nav-link:hover {
+            color: var(--neon-blue);
+        }
+    
+        .nav-link:hover::after {
+            width: 100%;
+        }
+    
+        /* Main Container */
+        .container {
+            margin-top: 100px;
+            padding: 40px 5%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+    
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: transparent;
+            background: linear-gradient(90deg, var(--neon-blue), var(--cyber-yellow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            position: relative;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 255, 252, 0.3);
+        }
+    
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), transparent);
+            animation: underlineGrow 1s ease-out;
+        }
+    
+        @keyframes underlineGrow {
+            from { width: 0; }
+            to { width: 150px; }
+        }
+    
+        /* Cyberpunk Form Styling */
+        form {
+            background: rgba(13, 2, 33, 0.7);
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 252, 0.2);
+            animation: floatUp 0.6s ease-out;
+        }
+    
+        @keyframes floatUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+    
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--neon-blue);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+    
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+    
+        .form-control:focus {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 15px rgba(255, 42, 109, 0.3);
+            outline: none;
+            background: rgba(0, 0, 0, 0.5);
+        }
+    
+        /* Special styling for select dropdown */
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230ff0fc'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+        }
+    
+        /* File input customization */
+        input[type="file"].form-control {
+            padding: 10px;
+        }
+    
+        input[type="file"].form-control::-webkit-file-upload-button {
+            background: rgba(0, 255, 252, 0.1);
+            border: 1px solid var(--neon-blue);
+            border-radius: 3px;
+            padding: 8px 12px;
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+    
+        input[type="file"].form-control::-webkit-file-upload-button:hover {
+            background: rgba(0, 255, 252, 0.2);
+        }
+    
+        /* Submit Button */
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border: none;
+            border-radius: 5px;
+            color: var(--dark-space);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+    
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s;
+            z-index: -1;
+        }
+    
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 255, 252, 0.5);
+        }
+    
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+    
+        /* Floating Cyber Orbs */
+        .cyber-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+    
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.2;
+            animation: floatOrb linear infinite;
+        }
+    
+        @keyframes floatOrb {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translate(100vw, -100vh);
+                opacity: 0;
+            }
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .navbar {
+                padding: 15px 3%;
+            }
+            
+            .container {
+                padding: 30px 3%;
+            }
+        }
+    
+        @media (max-width: 992px) {
+            .navbar-right {
+                display: none;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+    
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 80px;
+                padding: 20px;
+            }
+            
+            form {
+                padding: 20px;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            h2::after {
+                width: 100px;
+            }
+        }
+    
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+            }
+            
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .form-control {
+                padding: 10px 12px;
+            }
+        }
+    
+        /* Form Field Focus Animation */
+        .form-group:focus-within label {
+            color: var(--neon-pink);
+            text-shadow: 0 0 8px rgba(255, 42, 109, 0.5);
+        }
+    
+        /* Blood Group Select Special Styling */
+        #bg {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--neon-blue);
+            color: white;
+        }
+    
+        #bg option {
+            background: var(--dark-space);
+        }
+    
+        /* Date Input Customization */
+        input[type="date"].form-control {
+            position: relative;
+        }
+    
+        input[type="date"].form-control::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.7;
+            cursor: pointer;
+        }
+    
+        input[type="date"].form-control::-webkit-datetime-edit-fields-wrapper {
+            color: white;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="cyber-bg"></div>
+    <div class="cyber-orbs" id="cyberOrbs"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/" class="logo">NeuralNest</a>
+        </div>
+        <div class="navbar-right">
+            <a href="{{ url_for('admin_dashboard') }}" class="nav-link">Dashboard</a>
+            <a href="{{ url_for('all_students') }}" class="nav-link">All Students</a>
+            <a href="{{ url_for('all_instructors') }}" class="nav-link">All Instructors</a>
+            <a href="{{ url_for('i_register') }}" class="nav-link">Add Instructors</a>
+            <a href="{{ url_for('a_profile') }}" class="nav-link">Profile</a>
+            <a href="{{ url_for('a_logout') }}" class="nav-link">Logout</a>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <h2>Instructor Registration</h2>
+        <form method="POST" action="{{ url_for('i_register') }}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.name.label }}
+                {{ form.name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.phone.label }}
+                {{ form.phone(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.course_name.label }}
+                {{ form.course_name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.address.label }}
+                {{ form.address(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.dob.label }}
+                {{ form.dob(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="bg">Blood Group</label>
+                <select id="bg" name="bg" class="form-control">
+                    <option value="" disabled selected>Select your blood group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            <div class="form-group">
+                {{ form.profile_picture.label }}
+                {{ form.profile_picture(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+<script>
+    // Create floating cyber orbs
+    document.addEventListener('DOMContentLoaded', function() {
+        const orbsContainer = document.getElementById('cyberOrbs');
+        const colors = ['#0ff0fc', '#ff2a6d', '#d300c5', '#f9f002'];
+        
+        for (let i = 0; i < 5; i++) {
+            const orb = document.createElement('div');
+            orb.classList.add('orb');
+            
+            // Random properties
+            const size = Math.random() * 300 + 100;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100 + 100;
+            const duration = Math.random() * 40 + 20;
+            const delay = Math.random() * 10;
+            
+            orb.style.width = `${size}px`;
+            orb.style.height = `${size}px`;
+            orb.style.background = color;
+            orb.style.left = `${posX}%`;
+            orb.style.top = `${posY}%`;
+            orb.style.animationDuration = `${duration}s`;
+            orb.style.animationDelay = `-${delay}s`;
+            
+            orbsContainer.appendChild(orb);
+        }
+
+        // Add focus effects to form elements
+        const formControls = document.querySelectorAll('.form-control');
+        formControls.forEach(control => {
+            control.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            control.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+    });
+</script>
